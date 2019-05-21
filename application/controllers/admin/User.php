@@ -37,7 +37,7 @@ class User extends Admin_Controller
 
         $user_id = $id;
 
-        if ($action == 'edit_user') {
+        if ($action == 'edit_user' && $id != my_id()) {
             $data['active'] = 2;
             $can_edit = $this->user_model->can_action('tbl_users', 'edit', array('user_id' => $id));
             $edited = can_action('24', 'edited');
@@ -176,79 +176,84 @@ class User extends Admin_Controller
 
     public function user_details($id, $active = null)
     {
-        $data['title'] = lang('user_details');
-        $data['id'] = $id;
-        if (!empty($active)) {
-            $data['active'] = $active;
-        } else {
-            $data['active'] = 1;
-        }
-        $date = $this->input->post('date', true);
-        if (!empty($date)) {
-            $data['date'] = $date;
-        } else {
-            $data['date'] = date('Y-m');
-        }
-        $data['attendace_info'] = $this->get_report($id, $data['date']);
-        $data['my_leave_report'] = leave_report($id);
-        //
-        if ($this->input->post('year', TRUE)) { // if input year
-            $data['year'] = $this->input->post('year', TRUE);
-        } else { // else current year
-            $data['year'] = date('Y'); // get current year
-        }
-        // get all expense list by year and month
-        $data['provident_fund_info'] = $this->get_provident_fund_info($data['year'], $id);
+        if ($id == my_id() || !empty(admin())) {
+            $data['title'] = lang('user_details');
+            $data['id'] = $id;
+            if (!empty($active)) {
+                $data['active'] = $active;
+            } else {
+                $data['active'] = 1;
+            }
+            $date = $this->input->post('date', true);
+            if (!empty($date)) {
+                $data['date'] = $date;
+            } else {
+                $data['date'] = date('Y-m');
+            }
+            $data['attendace_info'] = $this->get_report($id, $data['date']);
+            $data['my_leave_report'] = leave_report($id);
+            //
+            if ($this->input->post('year', TRUE)) { // if input year
+                $data['year'] = $this->input->post('year', TRUE);
+            } else { // else current year
+                $data['year'] = date('Y'); // get current year
+            }
+            // get all expense list by year and month
+            $data['provident_fund_info'] = $this->get_provident_fund_info($data['year'], $id);
 
-        if ($this->input->post('overtime_year', TRUE)) { // if input year
-            $data['overtime_year'] = $this->input->post('overtime_year', TRUE);
-        } else { // else current year
-            $data['overtime_year'] = date('Y'); // get current year
-        }
-        // get all expense list by year and month
-        $data['all_overtime_info'] = $this->get_overtime_info($data['overtime_year'], $id);
-        $data['profile_info'] = $this->db->where('user_id', $id)->get('tbl_account_details')->row();
+            if ($this->input->post('overtime_year', TRUE)) { // if input year
+                $data['overtime_year'] = $this->input->post('overtime_year', TRUE);
+            } else { // else current year
+                $data['overtime_year'] = date('Y'); // get current year
+            }
+            // get all expense list by year and month
+            $data['all_overtime_info'] = $this->get_overtime_info($data['overtime_year'], $id);
+            $data['profile_info'] = $this->db->where('user_id', $id)->get('tbl_account_details')->row();
 
-        $data['total_attendance'] = count($this->total_attendace_in_month($id));
+            $data['total_attendance'] = count($this->total_attendace_in_month($id));
 
-        $data['total_absent'] = count($this->total_attendace_in_month($id, 'absent'));
+            $data['total_absent'] = count($this->total_attendace_in_month($id, 'absent'));
 
-        $data['total_leave'] = count($this->total_attendace_in_month($id, 'leave'));
-        //award received
-        $data['total_award'] = count($this->db->where('user_id', $id)->get('tbl_employee_award')->result());
+            $data['total_leave'] = count($this->total_attendace_in_month($id, 'leave'));
+            //award received
+            $data['total_award'] = count($this->db->where('user_id', $id)->get('tbl_employee_award')->result());
 
-        // get working days holiday
-        $holidays = $this->global_model->get_holidays(); //tbl working Days Holiday
+            // get working days holiday
+            $holidays = $this->global_model->get_holidays(); //tbl working Days Holiday
 
-        $num = cal_days_in_month(CAL_GREGORIAN, date('n'), date('Y'));
-        $working_holiday = 0;
-        for ($i = 1; $i <= $num; $i++) {
-            $day_name = date('l', strtotime("+0 days", strtotime(date('Y') . '-' . date('n') . '-' . $i)));
+            $num = cal_days_in_month(CAL_GREGORIAN, date('n'), date('Y'));
+            $working_holiday = 0;
+            for ($i = 1; $i <= $num; $i++) {
+                $day_name = date('l', strtotime("+0 days", strtotime(date('Y') . '-' . date('n') . '-' . $i)));
 
-            if (!empty($holidays)) {
-                foreach ($holidays as $v_holiday) {
-                    if ($v_holiday->day == $day_name) {
-                        $working_holiday += count($day_name);
+                if (!empty($holidays)) {
+                    foreach ($holidays as $v_holiday) {
+                        if ($v_holiday->day == $day_name) {
+                            $working_holiday += count($day_name);
+                        }
                     }
                 }
             }
+            // get public holiday
+            $public_holiday = count($this->total_attendace_in_month($id, TRUE));
+
+            // get total days in a month
+            $month = date('m');
+            $year = date('Y');
+            $days = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+            // total attend days in a month without public holiday and working days
+            $data['total_days'] = $days - $working_holiday - $public_holiday;
+
+            $data['all_working_hour'] = $this->all_attendance_id_by_date($id, true);
+
+            $data['this_month_working_hour'] = $this->all_attendance_id_by_date($id);
+
+            $data['subview'] = $this->load->view('admin/user/user_details', $data, TRUE);
+            $this->load->view('admin/_layout_main', $data);
+        } else {
+            set_message('error', lang('there_in_no_value'));
+            redirect('admin/dashboard');
         }
-        // get public holiday
-        $public_holiday = count($this->total_attendace_in_month($id, TRUE));
-
-        // get total days in a month
-        $month = date('m');
-        $year = date('Y');
-        $days = cal_days_in_month(CAL_GREGORIAN, $month, $year);
-        // total attend days in a month without public holiday and working days
-        $data['total_days'] = $days - $working_holiday - $public_holiday;
-
-        $data['all_working_hour'] = $this->all_attendance_id_by_date($id, true);
-
-        $data['this_month_working_hour'] = $this->all_attendance_id_by_date($id);
-
-        $data['subview'] = $this->load->view('admin/user/user_details', $data, TRUE);
-        $this->load->view('admin/_layout_main', $data);
     }
 
     public function all_attendance_id_by_date($user_id, $flag = null)
@@ -806,8 +811,7 @@ class User extends Admin_Controller
                         $assigned_to = $this->user_model->array_from_post(array('assigned_to'));
                         if (!empty($assigned_to['assigned_to'])) {
                             foreach ($assigned_to['assigned_to'] as $assign_user) {
-//                                $assigned[$assign_user] = $this->input->post('action_' . $assign_user, true);
-                                $assigned[$assign_user] = $this->input->post('action_2', true);
+                                $assigned[$assign_user] = $this->input->post('action_' . $assign_user, true);
                             }
                         }
                     }
@@ -817,7 +821,6 @@ class User extends Admin_Controller
                         }
                     }
                 }
-//               echo $assigned;exit;
                 $login_data['permission'] = $assigned;
                 $this->user_model->_table_name = 'tbl_users'; // table name
                 $this->user_model->_primary_key = 'user_id'; // $id

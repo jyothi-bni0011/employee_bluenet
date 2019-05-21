@@ -444,8 +444,8 @@ $(window).load(function () {
     })();
 
     $.support.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame || function (callback) {
-            window.setTimeout(callback, 1000 / 60);
-        };
+        window.setTimeout(callback, 1000 / 60);
+    };
     $.support.touch = (
         ('ontouchstart' in window && navigator.userAgent.toLowerCase().match(/mobile|tablet/)) ||
         (window.DocumentTouch && document instanceof window.DocumentTouch) ||
@@ -1606,3 +1606,13 @@ initScrollbar = function (selector, options) {
 function goBack() {
     window.history.back();
 }
+
+$('#s-menu').keyup(function () {
+    var that = this, $allListElements = $('ul.s-menu > li');
+    var $matchingListElements = $allListElements.filter(function (i, li) {
+        var listItemText = $(li).text().toUpperCase(), searchText = that.value.toUpperCase();
+        return ~listItemText.indexOf(searchText);
+    });
+    $allListElements.hide();
+    $matchingListElements.show();
+});

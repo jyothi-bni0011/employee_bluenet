@@ -167,11 +167,11 @@ class Admin_Model extends MY_Model
             CURLOPT_SSL_VERIFYHOST => 0,
             CURLOPT_SSL_VERIFYPEER => 0,
             CURLOPT_TIMEOUT => 30,
-            CURLOPT_URL => LATEST_VERSION,
+            CURLOPT_URL => UPDATE_URL . '/api/latest_version',
             CURLOPT_POST => 1,
             CURLOPT_POSTFIELDS => array(
-                'update_info' => 'true',
-                'current_version' => $this->get_current_db_version()
+                'current_version' => $this->get_current_db_version(),
+                'item_id' => '16292398',
             )
         ));
 
@@ -215,7 +215,6 @@ class Admin_Model extends MY_Model
     public
     function upgrade_database_silent()
     {
-
         if (!is_really_writable(APPPATH . 'config/config.php')) {
             show_error('/config/config.php file is not writable. You need to change the permissions to 755. This error occurs while trying to update database to latest version.');
             die;

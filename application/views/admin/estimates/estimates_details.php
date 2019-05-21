@@ -107,7 +107,7 @@ $deleted = can_action('14', 'deleted');
                     <?php if ($estimates_info->status == 'expired' || $estimates_info->status == 'sent' || $estimates_info->status == 'cancelled' || $estimates_info->status == 'draft') { ?>
                         <li>
                             <a href="<?= base_url() ?>admin/estimates/change_status/pending/<?= $estimates_info->estimates_id ?>"
-                               title="<?= lang('mark_as_sent') ?>"><?= lang('mark_as_pending') ?></a>
+                               title="<?= lang('mark_as_pending') ?>"><?= lang('mark_as_pending') ?></a>
                         </li>
                     <?php } ?>
                     <?php if ($estimates_info->status == 'draft') { ?>

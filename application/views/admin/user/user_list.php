@@ -465,33 +465,46 @@ if (!empty($created) || !empty($edited)){
                                 <label class="col-sm-3 control-label"><strong><?= lang('designation') ?> </strong><span
                                             class="text-danger">*</span></label>
                                 <div class="col-sm-5">
-                                    <select class="form-control select_box department" required style="width: 100%"
-                                            name="designations_id">
-                                        <option value=""><?= lang('select') . ' ' . lang('designation'); ?></option>
-                                        <?php
-                                        if (!empty($all_designation_info)) {
-                                            foreach ($all_designation_info as $dept_name => $v_designation_info) {
-                                                ?>
-                                                <optgroup label="<?= $dept_name ?>">
-                                                    <?php if (!empty($v_designation_info)) {
-                                                        foreach ($v_designation_info as $v_designation) { ?>
-                                                            <option value="<?= $v_designation->designations_id ?>" <?php
-                                                            if (!empty($profile_info)) {
-                                                                if ($profile_info->designations_id == $v_designation->designations_id) {
-                                                                    echo 'selected';
-                                                                }
-                                                            }
-                                                            ?>><?= $v_designation->designations; ?></option>
-                                                            <?php
-                                                        }
-                                                    }
+                                    <div class="input-group">
+                                        <select class="form-control select_box department" required style="width: 100%"
+                                                name="designations_id">
+                                            <option value=""><?= lang('select') . ' ' . lang('designation'); ?></option>
+                                            <?php
+                                            if (!empty($all_designation_info)) {
+                                                foreach ($all_designation_info as $dept_name => $v_designation_info) {
                                                     ?>
-                                                </optgroup>
-                                                <?php
+                                                    <optgroup label="<?= $dept_name ?>">
+                                                        <?php if (!empty($v_designation_info)) {
+                                                            foreach ($v_designation_info as $v_designation) { ?>
+                                                                <option value="<?= $v_designation->designations_id ?>" <?php
+                                                                if (!empty($profile_info)) {
+                                                                    if ($profile_info->designations_id == $v_designation->designations_id) {
+                                                                        echo 'selected';
+                                                                    }
+                                                                }
+                                                                ?>><?= $v_designation->designations; ?></option>
+                                                                <?php
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </optgroup>
+                                                    <?php
+                                                }
                                             }
-                                        }
-                                        ?>
-                                    </select>
+                                            ?>
+                                        </select>
+                                        <?php
+                                        $acreated = can_action('70', 'created');
+                                        if (!empty($acreated)) { ?>
+                                            <div class="input-group-addon"
+                                                 title="<?= lang('new') . ' ' . lang('designation') ?>"
+                                                 data-toggle="tooltip" data-placement="top">
+                                                <a data-toggle="modal" data-target="#myModal_extra_lg"
+                                                   href="<?= base_url() ?>admin/departments/new_designation"><i
+                                                            class="fa fa-plus"></i></a>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
                                 </div>
                                 <?php
                                 if (!empty($profile_info->designations_id)) {
