@@ -1,5 +1,7 @@
 <?php
-define('UPDATE_URL', 'http://update.uniquecoder.com/');
+
+define('UPDATE_URL', 'http://system-update.coderitems.com/Ultimate');
+define('LATEST_VERSION', 'http://system-update.coderitems.com/Ultimate/latest_version.php');
 define('TEMP_FOLDER', FCPATH . 'uploads' . '/');
 
 define('MAIN_TEMP_FOLDER', FCPATH . 'temp' . '/');

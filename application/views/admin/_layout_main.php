@@ -274,6 +274,7 @@ if (!empty($direction) && $direction == 'rtl') {
 
         });
     });
+
 </script>
 
 <?php $this->load->view('admin/_layout_modal'); ?>

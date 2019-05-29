@@ -18,6 +18,9 @@ $comment_details = $this->db->where(array('task_id' => $task_details->task_id, '
 // get all $total_timer by tasks id
 $total_timer = $this->db->where(array('task_id' => $task_details->task_id, 'start_time !=' => 0, 'end_time !=' => 0,))->get('tbl_tasks_timer')->result();
 $all_sub_tasks = $this->db->where(array('sub_task_id' => $task_details->task_id))->get('tbl_task')->result();
+//echo "<pre>";
+//print_r($all_sub_tasks);
+//exit();
 $activities_info = $this->db->where(array('module' => 'tasks', 'module_field_id' => $task_details->task_id))->order_by('activity_date', 'DESC')->get('tbl_activities')->result();
 
 $where = array('user_id' => $this->session->userdata('user_id'), 'module_id' => $task_details->task_id, 'module_name' => 'tasks');

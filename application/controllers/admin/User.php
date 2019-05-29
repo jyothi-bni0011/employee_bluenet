@@ -1,6 +1,4 @@
-<?php
-
-if (!defined('BASEPATH')) {
+<?php if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -57,7 +55,7 @@ class User extends Admin_Controller
         // get all language
         $data['languages'] = $this->db->where('active', 1)->order_by('name', 'ASC')->get('tbl_languages')->result();
 
-        $data['assign_user'] = $this->user_model->all_permission_user('24');
+        $data['permission_user'] = $this->user_model->all_permission_user('24');
 
         $data['all_user_info'] = $this->user_model->get_permission('tbl_users');
 
@@ -803,7 +801,6 @@ class User extends Admin_Controller
                     $login_data['password'] = $this->hash($password);
                 }
                 $permission = $this->input->post('permission', true);
-                $assigned = 'all';
                 if (!empty($permission)) {
                     if ($permission == 'everyone') {
                         $assigned = 'all';
@@ -819,9 +816,18 @@ class User extends Admin_Controller
                         if ($assigned != 'all') {
                             $assigned = json_encode($assigned);
                         }
+                    } else {
+                        $assigned = 'all';
+                    }
+                    $login_data['permission'] = $assigned;
+                } else {
+                    set_message('error', lang('assigned_to') . ' Field is required');
+                    if (empty($_SERVER['HTTP_REFERER'])) {
+                        redirect('admin/user/user_list');
+                    } else {
+                        redirect($_SERVER['HTTP_REFERER']);
                     }
                 }
-                $login_data['permission'] = $assigned;
                 $this->user_model->_table_name = 'tbl_users'; // table name
                 $this->user_model->_primary_key = 'user_id'; // $id
                 if (!empty($user_id)) {

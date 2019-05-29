@@ -72,9 +72,9 @@ class Menu
         }
         if (isset($menu['parents'][$parent])) {
             if (!empty($sub)) {
-                $html .= "<ul id=" . $sub . " class='nav s-menu sidebar-subnav collapse'><li class=\"sidebar-subnav-header\">" . lang($sub) . "</li>\n";
+                $html .= "<ul id=" . $sub . " class='nav sidebar-subnav collapse'><li class=\"sidebar-subnav-header\">" . lang($sub) . "</li>\n";
             } else {
-                $html .= "<ul class='nav s-menu $ul_class'>\n";
+                $html .= "<ul class='nav $ul_class'>\n";
             }
             foreach ($menu['parents'][$parent] as $itemId) {
                 $result = $this->active_menu_id($menu['items'][$itemId]->menu_id);

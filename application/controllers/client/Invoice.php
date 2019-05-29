@@ -400,7 +400,7 @@ class Invoice extends Client_Controller
         }
     }
 
-    public function get_payment($invoices_id)
+    public function get_payemnt($invoices_id)
     {
 
         $due = round($this->invoice_model->calculate_to('invoice_due', $invoices_id), 2);

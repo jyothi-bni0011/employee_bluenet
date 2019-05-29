@@ -1,5 +1,4 @@
 <?php include_once 'assets/admin-ajax.php'; ?>
-
 <?= message_box('success'); ?>
 <?= message_box('error');
 $created = can_action('24', 'created');
@@ -540,10 +539,10 @@ if (!empty($created) || !empty($edited)){
                             <div class="form-group" id="border-none">
                                 <label for="field-1" class="col-sm-3 control-label"><?= lang('permission') ?> <span
                                             class="required">*</span></label>
-                                <div class="col-sm-5">
+                                <div class="col-sm-9">
                                     <div class="checkbox c-radio needsclick">
                                         <label class="needsclick">
-                                            <input <?php
+                                            <input id="" <?php
                                             if (!empty($login_info->permission) && $login_info->permission == 'all') {
                                                 echo 'checked';
                                             } elseif (empty($login_info)) {
@@ -558,7 +557,7 @@ if (!empty($created) || !empty($edited)){
                                     </div>
                                     <div class="checkbox c-radio needsclick">
                                         <label class="needsclick">
-                                            <input <?php
+                                            <input id="" <?php
                                             if (!empty($login_info->permission) && $login_info->permission != 'all') {
                                                 echo 'checked';
                                             }
@@ -584,8 +583,8 @@ if (!empty($created) || !empty($edited)){
                                             class="required">*</span></label>
                                 <div class="col-sm-9">
                                     <?php
-                                    if (!empty($assign_user)) {
-                                        foreach ($assign_user as $key => $v_user) {
+                                    if (!empty($permission_user)) {
+                                        foreach ($permission_user as $key => $v_user) {
 
                                             if ($v_user->role_id == 1) {
                                                 $role = '<strong class="badge btn-danger">' . lang('admin') . '</strong>';
@@ -600,13 +599,9 @@ if (!empty($created) || !empty($edited)){
                                                         <?php
                                                         if (!empty($login_info->permission) && $login_info->permission != 'all') {
                                                             $get_permission = json_decode($login_info->permission);
-                                                            if (!empty($get_permission) && is_array($get_permission)) {
-                                                                foreach ($get_permission as $user_id => $v_permission) {
-                                                                    if (!empty($user_id)) {
-                                                                        if ($user_id == $v_user->user_id) {
-                                                                            echo 'checked';
-                                                                        }
-                                                                    }
+                                                            foreach ($get_permission as $user_id => $v_permission) {
+                                                                if ($user_id == $v_user->user_id) {
+                                                                    echo 'checked';
                                                                 }
                                                             }
 
@@ -625,13 +620,10 @@ if (!empty($created) || !empty($edited)){
 
                                             if (!empty($login_info->permission) && $login_info->permission != 'all') {
                                                 $get_permission = json_decode($login_info->permission);
-                                                if (!empty($get_permission) && is_array($get_permission)) {
-                                                    foreach ($get_permission as $user_id => $v_permission) {
-                                                        if (!empty($user_id)) {
-                                                            if ($user_id == $v_user->user_id) {
-                                                                echo 'show';
-                                                            }
-                                                        }
+
+                                                foreach ($get_permission as $user_id => $v_permission) {
+                                                    if ($user_id == $v_user->user_id) {
+                                                        echo 'show';
                                                     }
                                                 }
 
@@ -652,17 +644,16 @@ if (!empty($created) || !empty($edited)){
 
                                                         if (!empty($login_info->permission) && $login_info->permission != 'all') {
                                                             $get_permission = json_decode($login_info->permission);
-                                                            if (!empty($get_permission) && is_array($get_permission)) {
-                                                                foreach ($get_permission as $user_id => $v_permission) {
-                                                                    if (!empty($user_id)) {
-                                                                        if ($user_id == $v_user->user_id) {
-                                                                            if (in_array('edit', $v_permission)) {
-                                                                                echo 'checked';
-                                                                            };
-                                                                        }
-                                                                    }
+
+                                                            foreach ($get_permission as $user_id => $v_permission) {
+                                                                if ($user_id == $v_user->user_id) {
+                                                                    if (in_array('edit', $v_permission)) {
+                                                                        echo 'checked';
+                                                                    };
+
                                                                 }
                                                             }
+
                                                         }
                                                         ?>
                                                            type="checkbox"
@@ -676,17 +667,14 @@ if (!empty($created) || !empty($edited)){
 
                                                         if (!empty($login_info->permission) && $login_info->permission != 'all') {
                                                             $get_permission = json_decode($login_info->permission);
-                                                            if (!empty($get_permission) && is_array($get_permission)) {
-                                                                foreach ($get_permission as $user_id => $v_permission) {
-                                                                    if (!empty($user_id)) {
-                                                                        if ($user_id == $v_user->user_id) {
-                                                                            if (in_array('delete', $v_permission)) {
-                                                                                echo 'checked';
-                                                                            };
-                                                                        }
-                                                                    }
+                                                            foreach ($get_permission as $user_id => $v_permission) {
+                                                                if ($user_id == $v_user->user_id) {
+                                                                    if (in_array('delete', $v_permission)) {
+                                                                        echo 'checked';
+                                                                    };
                                                                 }
                                                             }
+
                                                         }
                                                         ?>
                                                            name="action_<?= $v_user->user_id ?>[]"
