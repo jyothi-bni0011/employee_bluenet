@@ -155,6 +155,7 @@ $leave_info = $this->db->where('attendance_status', '3')->get('tbl_attendance')-
 //                        prev: '<i class="fa fa-angle-left"><i>',
 //                        next: '<i class="fa fa-angle-right"><i>'
 //                    },
+//                     firstDay: 1,
                     selectable: true,
                     selectHelper: true,
                     eventLimit: true,

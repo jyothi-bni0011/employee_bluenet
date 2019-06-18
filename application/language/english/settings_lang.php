@@ -377,7 +377,7 @@ $lang['update_now'] = "Update now";
 $lang['using_latest_version'] = "Your using Latest Version";
 $lang['purchase_key'] = "Purchase Key";
 $lang['system_update'] = "System Update";
-$lang['buyer'] = "Buyer";
+$lang['envato_username'] = "Envato Username";
 $lang['customer_group'] = "Customer Group";
 $lang['activity_delete_a_customer_group'] = "Delete The Customer Group";
 $lang['customer_group_added'] = "Group Information successfully Added";
@@ -693,6 +693,21 @@ $lang['trying_clock_email'] = "Trying Clock Email";
 $lang['allowed_ip'] = "Allowed IP";
 $lang['click_to'] = "Click to";
 $lang['only_allowed_ip_can_clock'] = "Only Allowed IP can Clock IN/OUT";
+$lang['search_menu'] = "Search in menu...";
+$lang['office_stock'] = "Office Asset";
+$lang['supplier'] = "Supplier";
+$lang['return_stock'] = "Return Stock";
+$lang['purchase_payment'] = "Purchase Payment";
+$lang['update_supplier'] = "Supplier Information Update";
+$lang['save_supplier'] = "Supplier Information Saved";
+$lang['supplier_deleted'] = "Supplier Information Deleted";
+$lang['update_purchase'] = "Purchase Information Update";
+$lang['save_purchase'] = "Purchase Information Saved";
+$lang['purchase_deleted'] = "Purchase Information Deleted";
+$lang['update_stock'] = "Update Stock";
+$lang['pay'] = "Pay";
+$lang['return_stock_date'] = "Return stock date";
+$lang['mark_as'] = "Mark as";
 
 
 

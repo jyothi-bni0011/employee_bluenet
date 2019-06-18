@@ -355,8 +355,6 @@ class Client extends Admin_Controller
         } else {
             redirect('admin/client/manage_client');
         }
-
-
     }
 
     public function see_password($type = null)
@@ -389,7 +387,6 @@ class Client extends Admin_Controller
         $data['subview'] = $this->load->view('admin/client/customer_group', $data, FALSE);
         $this->load->view('admin/_layout_modal', $data);
     }
-
     public function update_customer_group($id = null)
     {
         $this->client_model->_table_name = 'tbl_customer_group';
@@ -1245,5 +1242,78 @@ class Client extends Admin_Controller
         $this->client_model->delete($id);
         redirect('admin/client/client_details/' . $client_id . '/notes');
     }
+
+
+    public function new_client()
+    {
+        $data['title'] = lang('new_client');
+        $data['subview'] = $this->load->view('admin/client/new_client', $data, FALSE);
+        $this->load->view('admin/_layout_modal', $data);
+    }
+
+    public function update_client($id = null)
+    {
+        $created = can_action('4', 'created');
+        $edited = can_action('4', 'edited');
+        if (!empty($created) || !empty($edited) && !empty($id)) {
+            $data = $this->client_model->array_from_post(array('name', 'email', 'short_note', 'website', 'phone', 'mobile', 'fax', 'address', 'city', 'zipcode', 'currency',
+                'skype_id', 'linkedin', 'facebook', 'twitter', 'language', 'country', 'vat', 'hosting_company', 'hostname', 'port', 'username', 'latitude', 'longitude', 'customer_group_id'));
+
+            $password = $this->input->post('password', true);
+            if (!empty($password)) {
+                $data['password'] = encrypt($password);
+            }
+
+            if (!empty($_FILES['profile_photo']['name'])) {
+                $val = $this->client_model->uploadImage('profile_photo');
+                $val == TRUE || redirect('admin/client/manage_client');
+                $data['profile_photo'] = $val['path'];
+            }
+
+            $this->client_model->_table_name = 'tbl_client';
+            $this->client_model->_primary_key = "client_id";
+            $return_id = $this->client_model->save($data, $id);
+            if (!empty($id)) {
+                $id = $id;
+                $action = ('activity_added_new_company');
+            } else {
+                $id = $return_id;
+                $action = ('activity_update_company');
+            }
+            save_custom_field(12, $id);
+
+            $activities = array(
+                'user' => $this->session->userdata('user_id'),
+                'module' => 'client',
+                'module_field_id' => $id,
+                'activity' => $action,
+                'icon' => 'fa-user',
+                'value1' => $data['name']
+            );
+            $this->client_model->_table_name = 'tbl_activities';
+            $this->client_model->_primary_key = "activities_id";
+            $this->client_model->save($activities);
+            // messages for user
+            $type = "success";
+            $message = lang('client_updated');
+            set_message($type, $message);
+        }
+        if (!empty($id)) {
+            $result = array(
+                'id' => $id,
+                'name' => $data['name'],
+                'status' => $type,
+                'message' => $message,
+            );
+        } else {
+            $result = array(
+                'status' => 'error',
+                'message' => lang('there_in_no_value'),
+            );
+        }
+        echo json_encode($result);
+        exit();
+    }
+
 
 }

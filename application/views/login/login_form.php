@@ -37,7 +37,7 @@
     <?php } ?>
 </form>
 <?php if (config_item('allow_client_registration') == 'TRUE') { ?>
-<!--    <p class="pt-lg text-center"><?= lang('do_not_have_an_account') ?></p><a href="<?= base_url() ?>login/register"
+    <p class="pt-lg text-center"><?= lang('do_not_have_an_account') ?></p><a href="<?= base_url() ?>login/register"
                                                                              class="btn btn-block btn-default"><i
-            class="fa fa-sign-in"></i> <?= lang('get_your_account') ?></a>-->
+            class="fa fa-sign-in"></i> <?= lang('get_your_account') ?></a>
 <?php } ?>

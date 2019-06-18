@@ -356,7 +356,7 @@ class Job_Circular extends Admin_Controller
                 $action .= '<a href="' . base_url() . 'admin/job_circular/change_application_status/' . $v_job_application->job_appliactions_id . '" title="' . lang('change_status') . '" class="btn btn-success btn-xs" data-toggle="modal" data-target="#myModal"><span
                             class="fa fa-pencil-square-o"></span> ' . lang('status') . '</a>' . ' ';
 
-                $action .= '<a href="' . base_url() . 'admin/job_circular/jobs_application_details/' . $v_job_application->job_appliactions_id . '" title="' . lang('view') . '" class="btn btn-success btn-xs" data-toggle="modal" data-target="#myModal"><span
+                $action .= '<a href="' . base_url() . 'admin/job_circular/jobs_application_details/' . $v_job_application->job_appliactions_id . '" title="' . lang('view') . '" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal"><span
                             class="fa fa-list-alt"></span></a>' . ' ';
 
                 $action .= ajax_anchor(base_url("admin/job_circular/delete_jobs_application/" . $v_job_application->job_appliactions_id), "<i class='btn btn-xs btn-danger fa fa-trash-o'></i>", array("class" => "", "title" => lang('delete'), "data-fade-out-on-success" => "#table_" . $_key)) . ' ';

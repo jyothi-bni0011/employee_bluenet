@@ -49,7 +49,7 @@ class Paypal_gateway extends App_gateway
             $company_name = config_item('website_name');
         }
         if (config_item('paypal_live') == 'TRUE') {
-            $mode = 'FALSE';
+            $mode = '';
         } else {
             $mode = 'TRUE';
         }

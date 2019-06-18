@@ -1,3 +1,4 @@
+
 <div class="panel panel-custom">
     <!-- Default panel contents -->
 
@@ -57,6 +58,20 @@
             </div>
             <div class="col-sm-8">
                 <p class="form-control-static"><?php echo $job_application_info->mobile ?></p>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-sm-4 text-right">
+                <label class="control-label"><strong><?= lang('cover_later') ?> : </strong></label>
+            </div>
+            <div class="col-sm-8">
+                <p class="form-control-static">
+                <blockquote style="font-size: 12px;word-wrap: break-word;"><?php
+                    if (!empty($job_application_info->cover_letter)) {
+                        echo $job_application_info->cover_letter;
+                    }
+                    ?></blockquote>
+                </p>
             </div>
         </div>
         <div class="col-md-12">

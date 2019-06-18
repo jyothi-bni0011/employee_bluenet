@@ -242,9 +242,11 @@
         return $result;
     }
 
-    function count_rows($table, $where)
+    function count_rows($table, $where = null)
     {
-        $this->db->where($where);
+        if (!empty($where)) {
+            $this->db->where($where);
+        }
         $query = $this->db->get($table);
         if ($query->num_rows() > 0) {
             return $query->num_rows();
@@ -653,6 +655,68 @@
         $records = $this->db->where('reference_no', config_item('estimate_prefix') . $next_number)->get('tbl_estimates')->num_rows();
         if ($records > 0) {
             return $this->reference_no_exists($next_number + 1);
+        } else {
+            return $next_number;
+        }
+    }
+
+    public function generate_purchase_number()
+    {
+        $total_invoice = $this->count_rows('tbl_purchases');
+        if ($total_invoice > 0) {
+//            $ref_number = intval(substr($row->reference_no, -4));
+            $next_number = ++$total_invoice;
+//            if ($next_number < $ref_number) {
+//                $next_number = $ref_number + 1;
+//            }
+            if ($next_number < config_item('invoice_start_no')) {
+                $next_number = config_item('invoice_start_no');
+            }
+            $next_number = $this->purchase_reference_no_exists($next_number);
+            $next_number = sprintf('%04d', $next_number);
+            return $next_number;
+        } else {
+            return sprintf('%04d', config_item('invoice_start_no'));
+        }
+    }
+
+    public function purchase_reference_no_exists($next_number)
+    {
+        $next_number = sprintf('%04d', $next_number);
+        $records = $this->db->where('reference_no', config_item('purchase_prefix') . $next_number)->get('tbl_purchases')->num_rows();
+        if ($records > 0) {
+            return $this->purchase_reference_no_exists($next_number + 1);
+        } else {
+            return $next_number;
+        }
+    }
+
+    public function generate_return_stock_number()
+    {
+        $total_invoice = $this->count_rows('tbl_return_stock');
+        if ($total_invoice > 0) {
+//            $ref_number = intval(substr($row->reference_no, -4));
+            $next_number = ++$total_invoice;
+//            if ($next_number < $ref_number) {
+//                $next_number = $ref_number + 1;
+//            }
+            if ($next_number < config_item('invoice_start_no')) {
+                $next_number = config_item('invoice_start_no');
+            }
+            $next_number = $this->return_stock_reference_no_exists($next_number);
+            $next_number = sprintf('%04d', $next_number);
+            return $next_number;
+        } else {
+            return sprintf('%04d', config_item('invoice_start_no'));
+        }
+    }
+
+    public function return_stock_reference_no_exists($next_number)
+    {
+        $next_number = sprintf('%04d', $next_number);
+        $records = $this->db->where('reference_no', config_item('return_stock_prefix') . $next_number)->get('tbl_return_stock')->num_rows();
+        if ($records > 0) {
+            return $this->return_stock_reference_no_exists($next_number + 1);
         } else {
             return $next_number;
         }
@@ -1174,6 +1238,10 @@
             $item_info = $this->db->where('estimate_items_id', $items_id)->get('tbl_estimate_items')->row();
         } else if ($type == 'proposal') {
             $item_info = $this->db->where('proposals_items_id', $items_id)->get('tbl_proposals_items')->row();
+        } else if ($type == 'purchase') {
+            $item_info = $this->db->where('items_id', $items_id)->get('tbl_purchase_items')->row();
+        } else if ($type == 'return_stock') {
+            $item_info = $this->db->where('items_id', $items_id)->get('tbl_return_stock_items')->row();
         } else {
             $item_info = $this->db->where('items_id', $items_id)->get('tbl_items')->row();
         }

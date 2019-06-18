@@ -258,7 +258,7 @@ class Leave_Management extends Admin_Controller
             if ($this->session->userdata('user_type') == 1 || !empty($dept_head) && $dept_head->department_head_id == $my_details->user_id) {
                 $where = array('application_status' => 1);
             } else {
-                $where = array('application_status' => 1, 'user_id' => $this->session->userdata('user_id'));
+                $where = array('application_status' => 1, 'tbl_leave_application.user_id' => $this->session->userdata('user_id'));
             }
             $fetch_data = make_datatables($where);
             $office_hours = config_item('office_hours');

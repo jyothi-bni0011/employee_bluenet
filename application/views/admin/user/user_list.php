@@ -1,4 +1,5 @@
 <?php include_once 'assets/admin-ajax.php'; ?>
+
 <?= message_box('success'); ?>
 <?= message_box('error');
 $created = can_action('24', 'created');
@@ -281,7 +282,8 @@ if (!empty($created) || !empty($edited)){
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-lg-3 control-label"><strong><?= lang('profile_photo') ?></label>
+                                <label class="col-lg-3 control-label"><strong><?= lang('profile_photo') ?></strong><span
+                                            class="text-danger">*</span></label>
                                 <div class="col-lg-5">
                                     <div class="fileinput fileinput-new" data-provides="fileinput">
                                         <div class="fileinput-new thumbnail" style="width: 210px;">

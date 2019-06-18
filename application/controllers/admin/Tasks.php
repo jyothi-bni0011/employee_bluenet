@@ -109,9 +109,9 @@ class Tasks extends Admin_Controller
             $this->load->model('datatables');
             $custom_field = custom_form_table_search(3);
             $this->datatables->table = 'tbl_task';
-            $main_column = array('task_id','task_name', 'due_date','task_status','billable');
-            $action_array=array('task_id');
-            $result = array_merge($main_column, $custom_field,$action_array);
+            $main_column = array('task_id', 'task_name', 'due_date', 'task_status', 'billable');
+            $action_array = array('task_id');
+            $result = array_merge($main_column, $custom_field, $action_array);
             $this->datatables->column_order = $result;
             $this->datatables->column_search = $result;
             $this->datatables->order = array('task_id' => 'desc');
@@ -167,7 +167,7 @@ class Tasks extends Admin_Controller
             foreach ($fetch_data as $_key => $v_task) {
                 if (!empty($v_task)) {
                     $action = null;
-//                    $checkbox = null;
+                    $checkbox = null;
                     $can_edit = $this->tasks_model->can_action('tbl_task', 'edit', array('task_id' => $v_task->task_id));
                     $can_delete = $this->tasks_model->can_action('tbl_task', 'delete', array('task_id' => $v_task->task_id));
                     if ($v_task->task_progress == 100) {
@@ -178,11 +178,11 @@ class Tasks extends Admin_Controller
                         $c_progress = 0;
                     }
                     $sub_array = array();
-//                    if (!empty($created) || !empty($edited)) {
-//                        $checkbox .= '<div class="is_complete checkbox c-checkbox"><label><input type="checkbox" data-id="' . $v_task->task_id . '" style="position: absolute"' . (($c_progress >= 100) ? 'checked' : null) . '><span class="fa fa-check"></span></label></div>';
-//                    }
+                    if (!empty($created) || !empty($edited)) {
+                        $checkbox .= '<div class="is_complete checkbox c-checkbox"><label><input type="checkbox" data-id="' . $v_task->task_id . '" style="position: absolute"' . (($c_progress >= 100) ? 'checked' : null) . '><span class="fa fa-check"></span></label></div>';
+                    }
 
-//                    $sub_array[] = $checkbox;
+                    $sub_array[] = $checkbox;
                     $name = null;
                     $name .= '<a class="text-info" href="' . base_url() . 'admin/tasks/view_task_details/' . $v_task->task_id . '">' . $v_task->task_name . '</a>';
                     if (strtotime(date('Y-m-d')) > strtotime($v_task->due_date) && $c_progress < 100) {
@@ -247,7 +247,7 @@ class Tasks extends Admin_Controller
                         $assigned .= '<strong>' . lang("everyone") . '</strong><i title="' . lang('permission_for_all') . '" class="fa fa-question-circle" data-toggle="tooltip" data-placement="top"></i>';
                     };
                     if (!empty($can_edit) && !empty($edited)) {
-                        $assigned .= '<span data-placement="top" data-toggle="tooltip" title="' . lang('add_more') . '"><a data-toggle="modal" data-target="#myModal" href="' . base_url() . 'admin/tasks/update_users/' . $v_task->task_id . '" class="text-default ml"><i class="fa fa-plus"></i></a></span>';
+                        $assigned .= ' <span data-placement="top" data-toggle="tooltip" title="' . lang('add_more') . '"><a data-toggle="modal" data-target="#myModal" href="' . base_url() . 'admin/tasks/update_users/' . $v_task->task_id . '" class="text-default ml"><i class="fa fa-plus"></i></a></span>';
                     };
 
                     $sub_array[] = $assigned;

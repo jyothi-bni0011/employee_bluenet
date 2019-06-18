@@ -79,7 +79,7 @@
             <header class="panel-heading"><?= lang('pay_invoice') ?></header>
             <div class="panel-body">
                 <form method="post" data-parsley-validate="" novalidate=""
-                      action="<?= base_url() ?>admin/invoice/get_payemnt/<?= $invoice_info->invoices_id ?>"
+                      action="<?= base_url() ?>admin/invoice/get_payment/<?= $invoice_info->invoices_id ?>"
                       class="form-horizontal">
                     <?php $currency = $this->invoice_model->client_currency_sambol($v_invoices->client_id);
                     if (empty($currency)) {

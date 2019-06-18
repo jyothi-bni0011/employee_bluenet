@@ -13,7 +13,6 @@
     <!-- SELECT2-->
     <script src="<?= base_url() ?>assets/plugins/select2/dist/js/select2.min.js"></script>
 <?php } ?>
-<script src="<?php echo base_url('assets/plugins/tinymce/tinymce.min.js'); ?>"></script>
 <!-- Data Table -->
 <?php if (empty($dataTables)) { ?>
     <?php include_once 'assets/plugins/dataTables/js/jquery.dataTables.min.php'; ?>
