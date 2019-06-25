@@ -20,7 +20,6 @@ class Admin_Model extends MY_Model
             $menuId[] = $result->menu_id;
             $menuId = $this->select_menu_by_id($result->parent, $menuId, $table);
         } else {
-
             return false;
         }
         if (!empty($menuId)) {

@@ -25,6 +25,24 @@
                                    value="<?= config_item('estimate_start_no') ?>" required>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><?= lang('estimate') . ' ' . lang('number_format') ?></label>
+                        <div class="col-lg-5">
+                            <input type="text" name="estimate_number_format" class="form-control" style="width:260px"
+                                   value="<?php
+                                   if (empty(config_item('estimate_number_format'))) {
+                                       echo '[' . config_item('estimate_prefix') . ']' . '[yyyy][mm][dd][number]';
+                                   } else {
+                                       echo config_item('estimate_number_format');
+                                   } ?>">
+                            <small>ex [<?= config_item('estimate_prefix') ?>] = <?= lang('estimate_prefix') ?>,[yyyy] =
+                                'Current Year (<?= date('Y') ?>)'[yy] ='Current Year (<?= date('y') ?>)',[mm] =
+                                'Current Month(<?= date('M') ?>)',[m] =
+                                'Current Month(<?= date('m') ?>)',[dd] = 'Current Date (<?= date('d') ?>)',[number] =
+                                'Invoice Number (<?= sprintf('%04d', config_item('estimate_start_no')) ?>)'
+                            </small>
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <label class="col-lg-3 control-label"><?= lang('increment_estimate_number') ?></label>

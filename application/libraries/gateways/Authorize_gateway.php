@@ -56,7 +56,7 @@ class Authorize_gateway extends App_gateway
         $billing_data['cvv'] = $this->ci->input->post('cvv');
 
         $requestData = [
-            'amount' => number_format($data['amount'], 2, '.', ''),
+            'amount' => number_format($data['amount'], config_item('decimal_separator'), '.', ''),
             'currency' => $data['currency'],
             'description' => 'Invoice Payment by Authorize.net' . $data['amount'],
             'transactionId' => $data['invoice_id'],

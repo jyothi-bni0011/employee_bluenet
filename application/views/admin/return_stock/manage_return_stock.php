@@ -71,7 +71,9 @@ if (!empty($created) || !empty($edited)){
                                             if (!empty($return_stock_info)) {
                                                 echo $return_stock_info->reference_no;
                                             } else {
-                                                echo config_item('return_stock_prefix');
+                                                if (empty(config_item('return_stock_number_format'))) {
+                                                    echo config_item('return_stock_prefix');
+                                                }
                                                 if (config_item('increment_return_stock_number') == 'FALSE') {
                                                     $this->load->helper('string');
                                                     echo random_string('nozero', 6);

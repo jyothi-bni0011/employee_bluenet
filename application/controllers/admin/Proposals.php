@@ -375,6 +375,7 @@ class Proposals extends Admin_Controller
                 $index = 0;
                 foreach ($items_data as $items) {
                     $items['proposals_id'] = $proposals_id;
+                    unset($items['total_qty']);
                     $tax = 0;
                     if (!empty($items['taxname'])) {
                         foreach ($items['taxname'] as $tax_name) {

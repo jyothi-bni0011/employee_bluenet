@@ -21,6 +21,13 @@
             /*src: url(http://eclecticgeek.com/dompdf/fonts/latha.ttf) format('true-type');*/
         }
 
+        .h4 {
+            font-size: 18px;
+        }
+
+        .h3 {
+            font-size: 24px;
+        }
         * {
             font-family: 'tamil-latha', sans-serif;
         }
@@ -426,7 +433,7 @@ if (!empty($supplier_info)) {
     <tr class="total">
         <td colspan="<?= $colspan ?>"></td>
         <td colspan="1"><?= lang('sub_total') ?></td>
-        <td><?= display_money($this->return_stock_model->calculate_to('invoice_cost', $return_stock_info->return_stock_id)) ?></td>
+        <td><?= display_money($this->return_stock_model->calculate_to('return_stock_cost', $return_stock_info->return_stock_id)) ?></td>
     </tr>
     <?php if ($return_stock_info->discount_total > 0): ?>
         <tr class="total">
@@ -473,6 +480,7 @@ if (!empty($supplier_info)) {
         <td><?= display_money($this->return_stock_model->calculate_to('total', $return_stock_info->return_stock_id), $currency->symbol); ?></td>
     </tr>
     <?php
+    $return_stock_due = $this->return_stock_model->calculate_to('return_stock_due', $return_stock_info->return_stock_id);
     $paid_amount = $this->return_stock_model->calculate_to('paid_amount', $return_stock_info->return_stock_id);
     if ($paid_amount > 0) {
         $total = lang('total_due');
@@ -490,11 +498,17 @@ if (!empty($supplier_info)) {
         <tr class="total">
             <td colspan="<?= $colspan ?>"></td>
             <td colspan="1"><span <?= $text ?>><?= $total ?></span></td>
-            <td><?= display_money($this->return_stock_model->calculate_to('invoice_due', $return_stock_info->return_stock_id), $currency->symbol); ?></td>
+            <td><?= display_money($return_stock_due, $currency->symbol); ?></td>
         </tr>
     <?php } ?>
     </tfoot>
 </table>
+<?php if (config_item('amount_to_words') == 'Yes') { ?>
+    <div class="clearfix">
+        <p class="right h4"><strong class="h3"><?= lang('num_word') ?>
+                : </strong> <?= number_to_word('', $return_stock_due); ?></p>
+    </div>
+<?php } ?>
 <div id="thanks"><?= lang('thanks') ?>!</div>
 <div id="notices">
     <div class="notice"><?= strip_tags($return_stock_info->notes) ?></div>

@@ -1251,11 +1251,10 @@ class Client extends Admin_Controller
         $this->load->view('admin/_layout_modal', $data);
     }
 
-    public function update_client($id = null)
+    public function update_client()
     {
         $created = can_action('4', 'created');
-        $edited = can_action('4', 'edited');
-        if (!empty($created) || !empty($edited) && !empty($id)) {
+        if (!empty($created)) {
             $data = $this->client_model->array_from_post(array('name', 'email', 'short_note', 'website', 'phone', 'mobile', 'fax', 'address', 'city', 'zipcode', 'currency',
                 'skype_id', 'linkedin', 'facebook', 'twitter', 'language', 'country', 'vat', 'hosting_company', 'hostname', 'port', 'username', 'latitude', 'longitude', 'customer_group_id'));
 
@@ -1272,14 +1271,8 @@ class Client extends Admin_Controller
 
             $this->client_model->_table_name = 'tbl_client';
             $this->client_model->_primary_key = "client_id";
-            $return_id = $this->client_model->save($data, $id);
-            if (!empty($id)) {
-                $id = $id;
-                $action = ('activity_added_new_company');
-            } else {
-                $id = $return_id;
-                $action = ('activity_update_company');
-            }
+            $id = $this->client_model->save($data);
+            $action = ('activity_update_company');
             save_custom_field(12, $id);
 
             $activities = array(
@@ -1293,7 +1286,7 @@ class Client extends Admin_Controller
             $this->client_model->_table_name = 'tbl_activities';
             $this->client_model->_primary_key = "activities_id";
             $this->client_model->save($activities);
-            // messages for user
+//            messages for user
             $type = "success";
             $message = lang('client_updated');
             set_message($type, $message);

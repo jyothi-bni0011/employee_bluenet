@@ -527,26 +527,38 @@ if (!empty($created) || !empty($edited)){
                                     <div class="form-group">
                                         <label class="col-lg-3 control-label"><?= lang('paid_by') ?> </label>
                                         <div class="col-lg-5">
-                                            <select class="form-control select_box" style="width: 100%"
-                                                    name="paid_by">
-                                                <option value="0"><?= lang('select_payer') ?></option>
-                                                <?php
-                                                $all_client = $this->db->get('tbl_client')->result();
-                                                if (!empty($all_client)) {
-                                                    foreach ($all_client as $v_client) {
-                                                        ?>
-                                                        <option value="<?= $v_client->client_id ?>"
-                                                            <?php
-                                                            if (!empty($deposit_info)) {
-                                                                echo $deposit_info->paid_by == $v_client->client_id ? 'selected' : '';
-                                                            }
+                                            <div class="input-group">
+                                                <select class="form-control select_box" style="width: 100%"
+                                                        name="paid_by">
+                                                    <option value="0"><?= lang('select_payer') ?></option>
+                                                    <?php
+                                                    $all_client = $this->db->get('tbl_client')->result();
+                                                    if (!empty($all_client)) {
+                                                        foreach ($all_client as $v_client) {
                                                             ?>
-                                                        ><?= ucfirst($v_client->name) ?></option>
-                                                        <?php
+                                                            <option value="<?= $v_client->client_id ?>"
+                                                                <?php
+                                                                if (!empty($deposit_info)) {
+                                                                    echo $deposit_info->paid_by == $v_client->client_id ? 'selected' : '';
+                                                                }
+                                                                ?>
+                                                            ><?= ucfirst($v_client->name) ?></option>
+                                                            <?php
+                                                        }
                                                     }
-                                                }
-                                                ?>
-                                            </select>
+                                                    $acreated = can_action('4', 'created');
+                                                    ?>
+                                                </select>
+                                                <?php if (!empty($acreated)) { ?>
+                                                    <div class="input-group-addon"
+                                                         title="<?= lang('new') . ' ' . lang('paid_by') ?>"
+                                                         data-toggle="tooltip" data-placement="top">
+                                                        <a data-toggle="modal" data-target="#myModal"
+                                                           href="<?= base_url() ?>admin/client/new_client"><i
+                                                                    class="fa fa-plus"></i></a>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">

@@ -90,6 +90,12 @@ $payment_methods = $this->purchase_model->check_by(array('payment_methods_id' =>
         <td class="headcol"><?= lang('payment_date') ?></td>
         <td><?= display_date($payments_info->payment_date); ?></td>
     </tr>
+    <?php if (config_item('amount_to_words') == 'Yes') { ?>
+        <tr>
+            <td class="headcol"><?= lang('num_word') ?></td>
+            <td><?= number_to_word('', $payments_info->amount); ?></td>
+        </tr>
+    <?php } ?>
     <tr>
         <td style="" class="headcol"><?= lang('transaction_id') ?></td>
         <td><?= $payments_info->trans_id ?></td>

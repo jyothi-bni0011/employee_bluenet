@@ -26,6 +26,7 @@
         padding-left: 30px;
     }
 
+
 </style>
 <aside class="aside">
     <!-- START Sidebar (left)-->
@@ -35,7 +36,7 @@
     $user_info = $this->db->where('user_id', $user_id)->get('tbl_users')->row();
     ?>
     <div class="aside-inner">
-        <nav data-sidebar-anyclick-close="" class="sidebar">
+        <nav data-sidebar-anyclick-close="" class="sidebar <?= config_item('show-scrollbar') ?>">
             <!-- START sidebar nav-->
             <ul class="nav">
                 <!-- START user info-->

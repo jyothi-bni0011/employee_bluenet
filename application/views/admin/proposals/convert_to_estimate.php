@@ -26,7 +26,9 @@
                                     class="text-danger">*</span></label>
                             <div class="col-lg-7">
                                 <input type="text" class="form-control" value="<?php
-                                echo config_item('estimate_prefix');
+                                if (empty(config_item('estimate_number_format'))) {
+                                    echo config_item('estimate_prefix');
+                                }
                                 if (config_item('increment_estimate_number') == 'FALSE') {
                                     $this->load->helper('string');
                                     echo random_string('nozero', 6);

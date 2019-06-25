@@ -292,7 +292,7 @@ class Transactions extends Admin_Controller
 
         $created = can_action('30', 'created');
         $edited = can_action('30', 'edited');
-        if (!empty($created) || !empty($edited)) {
+        if (!empty($created) || !empty($edited) && !empty($id)) {
             $data = $this->transactions_model->array_from_post(array('name', 'account_id', 'date', 'notes', 'category_id', 'paid_by', 'payment_methods_id', 'reference'));
 
             $data['type'] = 'Income';
@@ -723,7 +723,7 @@ class Transactions extends Admin_Controller
     {
         $created = can_action('31', 'created');
         $edited = can_action('31', 'edited');
-        if (!empty($created) || !empty($edited)) {
+        if (!empty($created) || !empty($edited) && !empty($id)) {
             $data = $this->transactions_model->array_from_post(array('name', 'date', 'notes', 'category_id', 'paid_by', 'payment_methods_id', 'reference', 'project_id', 'billable', 'client_visible'));
 
             $data['type'] = 'Expense';
@@ -1293,7 +1293,7 @@ class Transactions extends Admin_Controller
     {
         $created = can_action('32', 'created');
         $edited = can_action('32', 'edited');
-        if (!empty($created) || !empty($edited)) {
+        if (!empty($created) || !empty($edited) && !empty($id)) {
             if (!empty($id)) {
                 $to_account_id = $this->input->post('old_to_account_id', TRUE);
                 $from_account_id = $this->input->post('old_from_account_id', TRUE);

@@ -12,17 +12,9 @@ if (!empty($users_info)) {
             <div id="scroll-500">
                 <table class="table">
                     <?php foreach ($users_info as $key => $v_user) {
-                        $v_user = get_staff_details($v_user->user_id);
                         ?>
                         <tr>
                             <td><?= $key + 1 . '. <a href="' . base_url('admin/user/user_details/' . $v_user->user_id) . '">' . fullname($v_user->user_id) ?>
-                                <?php
-                                if ($v_user->role_id == 1) {
-                                    echo '<span class="badge btn-danger">' . lang('admin') . '</span>';
-                                } else if ($v_user->role_id == 3) {
-                                    echo '<span class="badge btn-primary">' . lang('staff') . '</span>';
-                                }
-                                ?>
                                 </a></td>
                         </tr>
                     <?php } ?>

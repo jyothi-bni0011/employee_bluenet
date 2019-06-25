@@ -113,7 +113,7 @@ class Training extends Admin_Controller
     {
         $created = can_action('101', 'created');
         $edited = can_action('101', 'edited');
-        if (!empty($created) || !empty($edited)) {
+        if (!empty($created) || !empty($edited) && !empty($id)) {
             $data = $this->training_model->array_from_post(array(
                 'user_id',
                 'training_name',

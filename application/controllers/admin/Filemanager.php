@@ -35,7 +35,7 @@ class Filemanager extends Admin_Controller
 
     public function elfinder_init()
     {
-//        if ($this->input->is_ajax_request()) {
+        if ($this->input->is_ajax_request() || $this->input->post()) {
             $this->load->helper('path');
             $_allowed_files = explode('|', config_item('allowed_files'));
             $config_allowed_files = array();
@@ -117,9 +117,9 @@ class Filemanager extends Admin_Controller
                 )
             );
             $this->load->library('elfinder_lib', $opts);
-//        } else {
-//            redirect('admin/dashboard');
-//        }
+        } else {
+            redirect('admin/dashboard');
+        }
     }
 
 }

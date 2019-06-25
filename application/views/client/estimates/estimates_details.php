@@ -307,14 +307,21 @@ if (is_file(config_item('invoice_logo'))) {
                             <?= display_money($estimates_info->adjustment); ?>
                         </p>
                     </div>
-                <?php endif ?>
-
+                <?php endif;
+                $estimate_total = $this->estimates_model->estimate_calculation('total', $estimates_info->estimates_id);
+                ?>
                 <div class="clearfix">
                     <p class="pull-left"><?= $language_info['total'] ?></p>
                     <p class="pull-right mr">
-                        <?= display_money($this->estimates_model->estimate_calculation('total', $estimates_info->estimates_id), $currency->symbol); ?>
+                        <?= display_money($estimate_total, $currency->symbol); ?>
                     </p>
                 </div>
+                <?php if (config_item('amount_to_words') == 'Yes') { ?>
+                    <div class="clearfix">
+                        <p class="pull-right h4"><strong class="h3"><?= lang('num_word') ?>
+                                : </strong> <?= number_to_word($estimates_info->client_id, $estimate_total); ?></p>
+                    </div>
+                <?php } ?>
 
             </div>
         </div>

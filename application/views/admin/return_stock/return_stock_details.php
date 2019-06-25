@@ -300,7 +300,7 @@ $status = $return_stock_info->status;
                 <div class="clearfix">
                     <p class="pull-left"><?= lang('sub_total') ?></p>
                     <p class="pull-right mr">
-                        <?= display_money($this->return_stock_model->calculate_to('invoice_cost', $return_stock_info->return_stock_id)); ?>
+                        <?= display_money($this->return_stock_model->calculate_to('return_stock_cost', $return_stock_info->return_stock_id)); ?>
                     </p>
                 </div>
                 <?php if ($return_stock_info->discount_total > 0): ?>
@@ -358,7 +358,7 @@ $status = $return_stock_info->status;
                 </div>
 
                 <?php
-
+                $return_stock_due = $this->return_stock_model->calculate_to('return_stock_due', $return_stock_info->return_stock_id);
                 if ($paid_amount > 0) {
                     $total = lang('total_due');
                     if ($paid_amount > 0) {
@@ -375,7 +375,13 @@ $status = $return_stock_info->status;
                     } ?>
                     <div class="clearfix">
                         <p class="pull-left h3 <?= $text ?>"><?= $total ?></p>
-                        <p class="pull-right mr h3"><?= display_money($this->return_stock_model->calculate_to('return_stock_due', $return_stock_info->return_stock_id), $currency->symbol); ?></p>
+                        <p class="pull-right mr h3"><?= display_money($return_stock_due, $currency->symbol); ?></p>
+                    </div>
+                <?php } ?>
+                <?php if (config_item('amount_to_words') == 'Yes') { ?>
+                    <div class="clearfix">
+                        <p class="pull-right h4"><strong class="h3"><?= lang('num_word') ?>
+                                : </strong> <?= number_to_word('', $return_stock_due); ?></p>
                     </div>
                 <?php } ?>
             </div>

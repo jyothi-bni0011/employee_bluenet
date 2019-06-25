@@ -305,14 +305,22 @@ if (strtotime($proposals_info->due_date) < strtotime(date('Y-m-d')) && $proposal
                             <?= display_money($proposals_info->adjustment); ?>
                         </p>
                     </div>
-                <?php endif ?>
+                <?php endif;
+                $total_proposal = $this->proposal_model->proposal_calculation('total', $proposals_info->proposals_id);
+                ?>
 
                 <div class="clearfix">
                     <p class="pull-left"><?= $language_info['total'] ?></p>
                     <p class="pull-right mr">
-                        <?= display_money($this->proposal_model->proposal_calculation('total', $proposals_info->proposals_id), $currency->symbol); ?>
+                        <?= display_money($total_proposal, $currency->symbol); ?>
                     </p>
                 </div>
+                <?php if (config_item('amount_to_words') == 'Yes') { ?>
+                    <div class="clearfix">
+                        <p class="pull-right h4"><strong class="h3"><?= lang('num_word') ?>
+                                : </strong> <?= number_to_word($proposals_info->module_id, $total_proposal); ?></p>
+                    </div>
+                <?php } ?>
 
             </div>
         </div>

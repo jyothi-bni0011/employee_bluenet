@@ -3,9 +3,25 @@
 <head>
     <meta charset="utf-8">
     <title><?= lang('invoice') ?></title>
+    <?php
+    $direction = $this->session->userdata('direction');
+    if (!empty($direction) && $direction == 'rtl') {
+        $RTL = 'on';
+    } else {
+        $RTL = config_item('RTL');
+    }
+    ?>
     <style type="text/css">
         @font-face {
             font-family: "Source Sans Pro", sans-serif;
+        }
+
+        .h4 {
+            font-size: 18px;
+        }
+
+        .h3 {
+            font-size: 24px;
         }
 
         .clearfix:after {
@@ -21,35 +37,44 @@
 
         body {
             color: #555555;
-            background: #FFFFFF;
+            background: #ffffff;
             font-size: 14px;
             font-family: "Source Sans Pro", sans-serif;
+            width: 100%;
+        <?php if(!empty($RTL)){?> text-align: right;
+        <?php }?>
         }
 
         header {
-
             padding: 10px 0;
             margin-bottom: 20px;
-            border-bottom: 1px solid #AAAAAA;
+            border-bottom: 1px solid #aaaaaa;
+        <?php if(!empty($RTL)){?> text-align: right;
+        <?php }?>
         }
 
         #logo {
-
+        <?php if(!empty($RTL)){?> text-align: right;
+        <?php }?>
         }
 
         #company {
-
-            text-align: right;
+        <?php if(!empty($RTL)){?> text-align: left;
+        <?php }else{?> text-align: right;
+        <?php }?>
         }
 
         #details {
-            margin-bottom: 50px;
+            margin-bottom: 20px;
+        <?php if(!empty($RTL)){?> text-align: right;
+        <?php }?>
         }
 
         #client {
             padding-left: 6px;
-            border-left: 6px solid #0087C3;
-
+            /*border-left: 6px solid #0087C3;*/
+        <?php if(!empty($RTL)){?> text-align: right;
+        <?php }?>
         }
 
         #client .to {
@@ -60,11 +85,14 @@
             font-size: 1em;
             font-weight: normal;
             margin: 0;
+        <?php if(!empty($RTL)){?> text-align: right;
+        <?php }?>
         }
 
         #invoice {
-
-            text-align: right;
+        <?php if(!empty($RTL)){?> text-align: left;
+        <?php }else{?> text-align: right;
+        <?php }?>
         }
 
         #invoice h1 {
@@ -72,16 +100,22 @@
             font-size: 1.5em;
             line-height: 1em;
             font-weight: normal;
+        <?php if(!empty($RTL)){?> text-align: right;
+        <?php }?>
         }
 
         #invoice .date {
             font-size: 1.1em;
             color: #777777;
+        <?php if(!empty($RTL)){?> text-align: right;
+        <?php }?>
         }
 
         table {
             width: 100%;
             border-spacing: 0;
+        <?php if(!empty($RTL)){?> text-align: right;
+        <?php }?>
         }
 
         table.items {
@@ -89,23 +123,32 @@
             border-collapse: collapse;
             border-spacing: 0;
             margin-bottom: 10px;
+        <?php if(!empty($RTL)){?> text-align: right;
+        <?php }?>
         }
 
         table.items th,
         table.items td {
             padding: 8px;
-            background: #EEEEEE;
+            /*background: #EEEEEE;*/
             border-bottom: 1px solid #FFFFFF;
-            text-align: left;
+        <?php if(!empty($RTL)){?> text-align: right;
+        <?php }else{?> text-align: left;
+        <?php }?>
+
         }
 
         table.items th {
             white-space: nowrap;
             font-weight: normal;
+        <?php if(!empty($RTL)){?> text-align: right;
+        <?php }?>
         }
 
         table.items td {
-            text-align: left;
+        <?php if(!empty($RTL)){?> text-align: right;
+        <?php }else{?> text-align: left;
+        <?php }?>
         }
 
         table.items td h3 {
@@ -114,18 +157,22 @@
             font-weight: normal;
             margin-top: 5px;
             margin-bottom: 5px;
+        <?php if(!empty($RTL)){?> text-align: right;
+        <?php }?>
         }
 
         table.items .no {
-            background: #DDDDDD;
+            background: #dddddd;
         }
 
         table.items .desc {
-            text-align: left;
+        <?php if(!empty($RTL)){?> text-align: right;
+        <?php }else{?> text-align: left;
+        <?php }?>
         }
 
         table.items .unit {
-            background: #DDDDDD;
+            background: #F3F3F3;
         }
 
         table.items .qty {
@@ -149,6 +196,8 @@
             font-size: 1.2em;
             white-space: nowrap;
             border-top: 1px solid #AAAAAA;
+        <?php if(!empty($RTL)){?> text-align: right;
+        <?php }?>
         }
 
         table.items tfoot tr:first-child td {
@@ -164,7 +213,9 @@
 
         table.items tfoot tr td:first-child {
             border: none;
-            text-align: right;
+        <?php if(!empty($RTL)){?> text-align: left;
+        <?php }else{?> text-align: right;
+        <?php }?>
         }
 
         #thanks {
@@ -175,6 +226,7 @@
         #notices {
             padding-left: 6px;
             border-left: 6px solid #0087C3;
+
         }
 
         #notices .notice {
@@ -188,13 +240,23 @@
             height: 30px;
             position: absolute;
             bottom: 0;
-            border-top: 1px solid #AAAAAA;
+            border-top: 1px solid #aaaaaa;
             padding: 8px 0;
             text-align: center;
         }
 
         tr.total td, tr th.total, tr td.total {
-            text-align: right;
+        <?php if(!empty($RTL)){?> text-align: left;
+        <?php }else{?> text-align: right;
+        <?php }?>
+        }
+
+        .bg-items {
+            background: #515151 !important;
+            color: #FFFFFF
+        }
+        .p-md {
+            padding: 12px !important;
         }
 
     </style>
@@ -220,43 +282,76 @@ $uri = $this->uri->segment(3);
 if ($uri == 'invoice_email') {
     $img = base_url() . config_item('invoice_logo');
 } else {
-    $img = $_SERVER['DOCUMENT_ROOT'] . '/' . config_item('invoice_logo');
+    $img = ROOTPATH . '/' . config_item('invoice_logo');
     $a = file_exists($img);
     if (empty($a)) {
         $img = base_url() . config_item('invoice_logo');
     }
+    if(!file_exists($img)){
+        $img = ROOTPATH . '/' . 'uploads/default_logo.png';
+    }
 }
 ?>
-
 <table class="clearfix">
     <tr>
         <td>
-            <div id="logo" style="margin-top: 8px;">
-                <img style=" height: 70px;" src="<?= $img ?>">
+            <div id="logo" class="left">
+                <img style=" width: 233px;height: 120px" src="<?= $img ?>">
             </div>
         </td>
-        <td>
-            <div id="company">
-                <h2 class="name"><?= (config_item('company_legal_name_' . $client_lang) ? config_item('company_legal_name_' . $client_lang) : config_item('company_legal_name')) ?></h2>
+        <td class="">
 
-                <div><?= (config_item('company_address_' . $client_lang) ? config_item('company_address_' . $client_lang) : config_item('company_address')) ?></div>
-
-                <div><?= (config_item('company_city_' . $client_lang) ? config_item('company_city_' . $client_lang) : config_item('company_city')) ?>
-                    , <?= config_item('company_zip_code') ?></div>
-
-                <div><?= (config_item('company_country_' . $client_lang) ? config_item('company_country_' . $client_lang) : config_item('company_country')) ?></div>
-                <div> <?= config_item('company_phone') ?></div>
-                <div><a href="mailto:<?= config_item('company_email') ?>"><?= config_item('company_email') ?></a></div>
-
+            <div class="right" style="float: right;padding-right: 20px">
+                <h2 style="margin-bottom: 0"><?= $language_info['invoice'] ?>: <span style="text-align: right"><?= $invoice_info->reference_no ?></span></h2>
+                <div class="date"><?= $language_info['invoice_date'] ?>
+                    : <span style="text-align: right"><?= strftime(config_item('date_format'), strtotime($invoice_info->invoice_date)); ?></span></div>
+                <div class="date"><?= $language_info['due_date'] ?>
+                    : <span style="text-align: right"><?= strftime(config_item('date_format'), strtotime($invoice_info->due_date)); ?></span></div>
+                <?php if (!empty($invoice_info->user_id)) { ?>
+                    <div class="date">
+                        <?= lang('sales') . ' ' . lang('agent') ?>: <span style="text-align: right"><?php
+                            $profile_info = $this->db->where('user_id', $invoice_info->user_id)->get('tbl_account_details')->row();
+                            if (!empty($profile_info)) {
+                                echo $profile_info->fullname;
+                            }
+                            ?></span>
+                    </div>
+                <?php } ?>
+                <div class="date"><?= $language_info['payment_status'] ?>: <span style="text-align: right"> <?= $payment_status ?></span></div>
             </div>
+
         </td>
     </tr>
 </table>
 
 <table id="details" class="clearfix">
     <tr>
-        <td>
-            <div id="client">
+        <td style="width: 50%;overflow: hidden">
+            <h4 class="p-md bg-items ">
+                <?= lang('our_info') ?>
+            </h4>
+        </td>
+        <td style="width: 50%">
+            <h4 class="p-md bg-items ">
+                <?= lang('customer') ?>
+            </h4>
+        </td>
+    </tr>
+    <tr style="margin-top: 0px">
+        <td style="width: 50%;overflow: hidden">
+            <div style="padding-left: 5px">
+                <h3 style="margin: 0px"><?= (config_item('company_legal_name_' . $client_lang) ? config_item('company_legal_name_' . $client_lang) : config_item('company_legal_name')) ?></h3>
+                <div><?= (config_item('company_address_' . $client_lang) ? config_item('company_address_' . $client_lang) : config_item('company_address')) ?></div>
+                <div><?= (config_item('company_city_' . $client_lang) ? config_item('company_city_' . $client_lang) : config_item('company_city')) ?>
+                    , <?= config_item('company_zip_code') ?></div>
+                <div><?= (config_item('company_country_' . $client_lang) ? config_item('company_country_' . $client_lang) : config_item('company_country')) ?></div>
+                <div> <?= config_item('company_phone') ?></div>
+                <div><a href="mailto:<?= config_item('company_email') ?>"><?= config_item('company_email') ?></a></div>
+                <div><?= config_item('company_vat') ?></div>
+            </div>
+        </td>
+        <td style="width: 50%">
+            <div style="padding-left: 5px">
                 <?php
                 if (!empty($client_info)) {
                     $client_name = $client_info->name;
@@ -276,54 +371,39 @@ if ($uri == 'invoice_email') {
                     $email = '-';
                 }
                 ?>
-                <h2 class="name"><?= $client_name ?></h2>
+                <h3 style="margin: 0px"><?= $client_name ?></h3>
                 <div class="address"><?= $address ?></div>
                 <div class="address"><?= $city ?>, <?= $zipcode ?>
                     ,<?= $country ?></div>
                 <div class="address"><?= $phone ?></div>
                 <div class="email"><a href="mailto:<?= $email ?>"><?= $email ?></a></div>
-            </div>
-        </td>
-        <td>
-            <div id="invoice">
-                <h1><?= $invoice_info->reference_no ?></h1>
-                <div class="date"><?= $language_info['invoice_date'] ?>
-                    :<?= strftime(config_item('date_format'), strtotime($invoice_info->invoice_date)); ?></div>
-                <div class="date"><?= $language_info['due_date'] ?>
-                    :<?= strftime(config_item('date_format'), strtotime($invoice_info->due_date)); ?></div>
-                <?php if (!empty($invoice_info->user_id)) { ?>
-                    <div class="date">
-                        <?= lang('sales') . ' ' . lang('agent') ?><?php
-                        $profile_info = $this->db->where('user_id', $invoice_info->user_id)->get('tbl_account_details')->row();
-                        if (!empty($profile_info)) {
-                            echo $profile_info->fullname;
-                        }
-                        ?>
-                    </div>
+                <?php if (!empty($client_info->vat)) { ?>
+                    <div class="email"><?= lang('vat_number') ?>: <?= $client_info->vat ?></div>
                 <?php } ?>
-                <div class="date"><?= $language_info['payment_status'] ?>: <?= $payment_status ?></div>
             </div>
         </td>
     </tr>
 </table>
 
-<table class="items" border="0" cellspacing="0" cellpadding="0" >
-    <thead>
+<table class="items">
+    <thead class="p-md bg-items">
     <tr>
-        <th class="desc"><?= $language_info['items'] ?></th>
+        <th><?= $language_info['description'] ?></th>
         <?php
+        $colspan = 3;
         $invoice_view = config_item('invoice_view');
         if (!empty($invoice_view) && $invoice_view == '2') {
+            $colspan = 4;
             ?>
-            <th><?= $language_info['hsn_code'] ?></th>
+            <th><?= lang('hsn_code') ?></th>
         <?php } ?>
-        <th class="unit"><?= $language_info['qty'] ?></th>
-        <th class="desc"><?= $language_info['price'] ?></th>
-        <th class="unit"><?= $language_info['tax'] ?></th>
-        <th class="total"><?= $language_info['total'] ?></th>
+        <th style="text-align: right"><?= $language_info['price'] ?></th>
+        <th style="text-align: right"><?= $language_info['qty'] ?></th>
+        <th style="text-align: right"><?= $language_info['tax'] ?></th>
+        <th style="text-align: right"><?= $language_info['total'] ?></th>
     </tr>
     </thead>
-    <tbody>
+    <tbody >
     <?php
     $invoice_items = $this->invoice_model->ordered_items_by_id($invoice_info->invoices_id);
 
@@ -333,16 +413,16 @@ if ($uri == 'invoice_email') {
             $item_tax_name = json_decode($v_item->item_tax_name);
             ?>
             <tr>
-                <td class="desc"><h3><?= $item_name ?></h3><?= nl2br($v_item->item_desc) ?></td>
+                <td class="unit"><h3><?= $item_name ?></h3><?= nl2br($v_item->item_desc) ?></td>
                 <?php
                 $invoice_view = config_item('invoice_view');
                 if (!empty($invoice_view) && $invoice_view == '2') {
                     ?>
                     <td><?= $v_item->hsn_code ?></td>
                 <?php } ?>
-                <td class="unit"><?= $v_item->quantity . '   ' . $v_item->unit ?></td>
-                <td class="desc"><?= display_money($v_item->unit_cost) ?></td>
-                <td class="unit"><?php
+                <td class="unit" style="text-align: right"><?= display_money($v_item->unit_cost) ?></td>
+                <td class="unit" style="text-align: right"><?= $v_item->quantity . '   ' . $v_item->unit ?></td>
+                <td class="unit" style="text-align: right"><?php
                     if (!empty($item_tax_name)) {
                         foreach ($item_tax_name as $v_tax_name) {
                             $i_tax_name = explode('|', $v_tax_name);
@@ -350,7 +430,7 @@ if ($uri == 'invoice_email') {
                         }
                     }
                     ?></td>
-                <td class="total"><?= display_money($v_item->total_cost) ?></td>
+                <td class="unit" style="text-align: right"><?= display_money($v_item->total_cost) ?></td>
             </tr>
         <?php endforeach; ?>
     <?php endif ?>
@@ -358,13 +438,13 @@ if ($uri == 'invoice_email') {
     </tbody>
     <tfoot>
     <tr class="total">
-        <td colspan="3"></td>
+        <td colspan="<?= $colspan ?>"></td>
         <td colspan="1"><?= $language_info['sub_total'] ?></td>
         <td><?= display_money($this->invoice_model->calculate_to('invoice_cost', $invoice_info->invoices_id)) ?></td>
     </tr>
     <?php if ($invoice_info->discount_total > 0): ?>
         <tr class="total">
-            <td colspan="3"></td>
+            <td colspan="<?= $colspan ?>"></td>
             <td colspan="1"><?= $language_info['discount'] ?>(<?php echo $invoice_info->discount_percent; ?>%)</td>
             <td> <?= display_money($this->invoice_model->calculate_to('discount', $invoice_info->invoices_id)) ?></td>
         </tr>
@@ -380,7 +460,7 @@ if ($uri == 'invoice_email') {
                 $tax_total += $total_tax[$t_key];
                 ?>
                 <tr class="total">
-                    <td colspan="3"></td>
+                    <td colspan="<?= $colspan ?>"></td>
                     <td colspan="1"><?= $tax[0] . ' (' . $tax[1] . ' %)' ?></td>
                     <td> <?= display_money($total_tax[$t_key]); ?></td>
                 </tr>
@@ -389,32 +469,33 @@ if ($uri == 'invoice_email') {
     } ?>
     <?php if ($tax_total > 0): ?>
         <tr class="total">
-            <td colspan="3"></td>
+            <td colspan="<?= $colspan ?>"></td>
             <td colspan="1"><?= $language_info['total'] . ' ' . $language_info['tax'] ?></td>
             <td><?= display_money($tax_total); ?></td>
         </tr>
     <?php endif;
     if ($invoice_info->adjustment > 0): ?>
         <tr class="total">
-            <td colspan="3"></td>
+            <td colspan="<?= $colspan ?>"></td>
             <td colspan="1"><?= $language_info['adjustment'] ?></td>
             <td><?= display_money($invoice_info->adjustment); ?></td>
         </tr>
     <?php endif ?>
     <tr class="total">
-        <td colspan="3"></td>
+        <td colspan="<?= $colspan ?>"></td>
         <td colspan="1"><?= $language_info['total'] ?></td>
         <td><?= display_money($this->invoice_model->calculate_to('total', $invoice_info->invoices_id), $currency->symbol); ?></td>
     </tr>
     <?php
     $paid_amount = $this->invoice_model->calculate_to('paid_amount', $invoice_info->invoices_id);
+    $invoice_due = $this->invoice_model->calculate_to('invoice_due', $invoice_info->invoices_id);
     if ($paid_amount > 0) {
         $total = $language_info['total_due'];
         if ($paid_amount > 0) {
             $text = 'style="color:red"';
             ?>
             <tr class="total">
-                <td colspan="3"></td>
+                <td colspan="<?= $colspan ?>"></td>
                 <td colspan="1"><?= $language_info['paid_amount'] ?></td>
                 <td><?= $paid_amount ?></td>
             </tr>
@@ -422,18 +503,25 @@ if ($uri == 'invoice_email') {
             $text = '';
         } ?>
         <tr class="total">
-            <td colspan="3"></td>
+            <td colspan="<?= $colspan ?>"></td>
             <td colspan="1"><span <?= $text ?>><?= $total ?></span></td>
-            <td><?= display_money($this->invoice_model->calculate_to('invoice_due', $invoice_info->invoices_id), $currency->symbol); ?></td>
+            <td><?= display_money($invoice_due, $currency->symbol); ?></td>
         </tr>
     <?php } ?>
     </tfoot>
 </table>
+<?php if (config_item('amount_to_words') == 'Yes') { ?>
+    <div class="clearfix">
+        <p class="right h4"><strong class="h3"><?= lang('num_word') ?>
+                : </strong> <?= number_to_word($invoice_info->client_id, $invoice_due); ?></p>
+    </div>
+<?php } ?>
 <div id="thanks"><?= lang('thanks') ?>!</div>
 <div id="notices">
     <div class="notice"><?= strip_html_tags($invoice_info->notes,true) ?></div>
 </div>
 <?php
+
 $invoice_view = config_item('invoice_view');
 if (!empty($invoice_view) && $invoice_view > 0) {
     ?>
@@ -472,7 +560,7 @@ if (!empty($invoice_view) && $invoice_view > 0) {
         <div class="panel-heading" style="border:1px solid #dde6e9;border-bottom: 2px solid #57B223;">
             <div class="panel-title"><?= lang('tax_summary') ?></div>
         </div>
-        <table class="items" border="0" cellspacing="0" cellpadding="0" >
+        <table class="items" border="0" cellspacing="0" cellpadding="0">
             <thead>
             <tr>
                 <th class="desc"><?= $language_info['items'] ?></th>
@@ -526,7 +614,7 @@ if (!empty($invoice_view) && $invoice_view > 0) {
             </tbody>
             <tfoot>
             <tr class="total">
-                <td colspan="3"></td>
+                <td colspan="<?= $colspan ?>"></td>
                 <td><?= $language_info['total'] ?></td>
                 <td><?= display_money($total_tax) ?></td>
                 <td><?= display_money($total_cost) ?></td>
@@ -535,6 +623,7 @@ if (!empty($invoice_view) && $invoice_view > 0) {
         </table>
     </div>
 <?php } ?>
+
 <footer>
     <?= config_item('invoice_footer') ?>
 </footer>

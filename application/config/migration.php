@@ -57,7 +57,6 @@ $config['migration_table'] = 'tbl_migrations';
 |
 */
 $config['migration_auto_latest'] = FALSE;
-
 /*
 |--------------------------------------------------------------------------
 | Migrations version
@@ -68,7 +67,7 @@ $config['migration_auto_latest'] = FALSE;
 | be upgraded / downgraded to.
 |
 */
-$config['migration_version'] = 139; // 1.3.9
+$config['migration_version'] = 140; // 1.4.0
 
 /*
 |--------------------------------------------------------------------------

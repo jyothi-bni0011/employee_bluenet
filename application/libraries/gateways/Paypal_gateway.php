@@ -66,7 +66,7 @@ class Paypal_gateway extends App_gateway
         $gateway->setbrandName($company_name);
 
         $request_data = [
-            'amount' => number_format($data['amount'], 2, '.', ''),
+            'amount' => number_format($data['amount'], config_item('decimal_separator'), '.', ''),
             'returnUrl' => base_url('payment/paypal/complete_payment/' . $data['invoices_id']),
             'cancelUrl' => $_SERVER["HTTP_REFERER"],
             'currency' => $data['currency'],
@@ -97,7 +97,7 @@ class Paypal_gateway extends App_gateway
     public function invoice_purchase($data)
     {
         if (config_item('paypal_live') == 'TRUE') {
-            $mode = 'FALSE';
+            $mode = '';
         } else {
             $mode = 'TRUE';
         }
@@ -110,7 +110,7 @@ class Paypal_gateway extends App_gateway
         $response = $gateway->completePurchase([
             'transactionReference' => $data['token'],
             'payerId' => $this->ci->input->get('PayerID'),
-            'amount' => number_format($data['total'], 2, '.', ''),
+            'amount' => number_format($data['total'], config_item('decimal_separator'), '.', ''),
             'currency' => $data['currency'],
         ])->send();
 

@@ -274,7 +274,7 @@ class Tickets extends Admin_Controller
         $created = can_action(6, 'created');
         $edited = can_action(6, 'edited');
 
-        if (!empty($created) || !empty($edited)) {
+        if (!empty($created) || !empty($edited) && !empty($id)) {
 
             $upload_file = array();
 

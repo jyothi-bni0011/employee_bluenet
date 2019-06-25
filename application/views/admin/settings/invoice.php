@@ -35,6 +35,25 @@
                                    value="<?= config_item('invoice_start_no') ?>" required>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><?= lang('invoice') . ' ' . lang('number_format') ?></label>
+                        <div class="col-lg-5">
+                            <input type="text" name="invoice_number_format" class="form-control" style="width:260px"
+                                   value="<?php
+                                   if (empty(config_item('invoice_number_format'))) {
+                                       echo '[' . config_item('invoice_prefix') . ']' . '[yyyy][mm][dd][number]';
+                                   } else {
+                                       echo config_item('invoice_number_format');
+                                   } ?>">
+                            <small>ex [<?= config_item('invoice_prefix') ?>] = <?= lang('invoice_prefix') ?>,[yyyy] =
+                                'Current Year (<?= date('Y') ?>)'[yy] ='Current Year (<?= date('y') ?>)',[mm] =
+                                'Current Month(<?= date('M') ?>)',[m] =
+                                'Current Month(<?= date('m') ?>)',[dd] = 'Current Date (<?= date('d') ?>)',[number] =
+                                'Invoice Number (<?= sprintf('%04d', config_item('invoice_start_no')) ?>)'
+                            </small>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label"><?= lang('qty_calculation_from_items') ?></label>
                         <div class="col-lg-6">
@@ -45,6 +64,53 @@
                                         echo "checked=\"checked\"";
                                     }
                                     ?> name="qty_calculation_from_items">
+                                    <span class="fa fa-check"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><?= lang('item_total_qty_alert') ?></label>
+                        <div class="col-lg-6">
+                            <div class="checkbox c-checkbox">
+                                <label class="needsclick">
+                                    <input value="Yes" type="checkbox" <?php
+                                    if (config_item('item_total_qty_alert') == 'Yes') {
+                                        echo "checked=\"checked\"";
+                                    }
+                                    ?> name="item_total_qty_alert">
+                                    <span class="fa fa-check"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><?= lang('amount_to_words') ?></label>
+                        <div class="col-lg-7">
+                            <div class="checkbox c-checkbox">
+                                <label class="needsclick">
+                                    <input value="Yes" type="checkbox" <?php
+                                    if (config_item('amount_to_words') == 'Yes') {
+                                        echo "checked=\"checked\"";
+                                    }
+                                    ?> name="amount_to_words">
+                                    <span class="fa fa-check"></span>
+                                </label>
+                                <small><?= lang('output_total_amount') . ' ' . lang('in') . ' ' . lang('invoice') . ',' . lang('payments') . ',' . lang('estimate') . ',' . lang('proposal') . ' ' . lang('and') . ' ' . lang('purchase') ?></small>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><?= lang('amount_to_words_lowercase') ?></label>
+                        <div class="col-lg-6">
+                            <div class="checkbox c-checkbox">
+                                <label class="needsclick">
+                                    <input value="Yes" type="checkbox" <?php
+                                    if (config_item('amount_to_words_lowercase') == 'Yes') {
+                                        echo "checked=\"checked\"";
+                                    }
+                                    ?> name="amount_to_words_lowercase">
                                     <span class="fa fa-check"></span>
                                 </label>
                             </div>

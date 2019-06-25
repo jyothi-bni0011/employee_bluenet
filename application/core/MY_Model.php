@@ -107,9 +107,6 @@
         $config['allowed_types'] = config_item('allowed_files');
         $config['max_size'] = config_item('max_file_size') * 1024;
         $config['overwrite'] = TRUE;
-        //        $config['max_width'] = '1024';
-        //        $config['max_height'] = '768';
-
         $this->load->library('upload', $config);
         $this->upload->initialize($config);
         if (!$this->upload->do_upload($field)) {
@@ -132,7 +129,7 @@
         $config['upload_path'] = 'uploads/';
         $config['allowed_types'] = config_item('allowed_files');
         $config['max_size'] = config_item('max_file_size') * 1024;
-
+        $config['overwrite'] = TRUE;
         $this->load->library('upload', $config);
         $this->upload->initialize($config);
         if (!$this->upload->do_upload($field)) {
@@ -161,7 +158,7 @@
         $config['upload_path'] = 'uploads/';
         $config['allowed_types'] = config_item('allowed_files');
         $config['max_size'] = config_item('max_file_size') * 1024;
-
+        $config['overwrite'] = TRUE;
         $this->load->library('upload', $config);
         $this->upload->initialize($config);
         if (!$this->upload->do_upload($field)) {
@@ -191,6 +188,7 @@
         $config['upload_path'] = 'uploads/';
         $config['allowed_types'] = config_item('allowed_files');
         $config['max_size'] = config_item('max_file_size') * 1024;
+        $config['overwrite'] = TRUE;
         $this->load->library('upload', $config);
         $this->upload->initialize($config);
         if (!$this->upload->do_multi_upload($field)) {
@@ -609,10 +607,20 @@
             }
             $next_number = $this->reference_no_exists($next_number);
             $next_number = sprintf('%04d', $next_number);
-            return $next_number;
         } else {
-            return sprintf('%04d', config_item('invoice_start_no'));
+            $next_number = sprintf('%04d', config_item('invoice_start_no'));
         }
+        if (!empty(config_item('invoice_number_format'))) {
+            $invoice_format = config_item('invoice_number_format');
+            $invoice_prefix = str_replace("[" . config_item('invoice_prefix') . "]", config_item('invoice_prefix'), $invoice_format);
+            $yyyy = str_replace("[yyyy]", date('Y'), $invoice_prefix);
+            $yy = str_replace("[yy]", date('y'), $yyyy);
+            $mm = str_replace("[mm]", date('M'), $yy);
+            $m = str_replace("[m]", date('m'), $mm);
+            $dd = str_replace("[dd]", date('d'), $m);
+            $next_number = str_replace("[number]", $next_number, $dd);
+        }
+        return $next_number;
     }
 
     public function reference_no_exists($next_number)
@@ -642,10 +650,20 @@
             }
             $next_number = $this->extimate_reference_no_exists($next_number);
             $next_number = sprintf('%04d', $next_number);
-            return $next_number;
         } else {
-            return sprintf('%04d', config_item('estimate_start_no'));
+            $next_number = sprintf('%04d', config_item('estimate_start_no'));
         }
+        if (!empty(config_item('estimate_number_format'))) {
+            $invoice_format = config_item('estimate_number_format');
+            $invoice_prefix = str_replace("[" . config_item('estimate_prefix') . "]", config_item('estimate_prefix'), $invoice_format);
+            $yyyy = str_replace("[yyyy]", date('Y'), $invoice_prefix);
+            $yy = str_replace("[yy]", date('y'), $yyyy);
+            $mm = str_replace("[mm]", date('M'), $yy);
+            $m = str_replace("[m]", date('m'), $mm);
+            $dd = str_replace("[dd]", date('d'), $m);
+            $next_number = str_replace("[number]", $next_number, $dd);
+        }
+        return $next_number;
     }
 
     public function extimate_reference_no_exists($next_number)
@@ -660,6 +678,41 @@
         }
     }
 
+    public function generate_proposal_number()
+    {
+        $query = $this->db->query('SELECT reference_no, proposals_id FROM tbl_proposals WHERE proposals_id = (SELECT MAX(proposals_id) FROM tbl_proposals)');
+        if ($query->num_rows() > 0) {
+            $row = $query->row();
+            $next_number = ++$row->proposals_id;
+            $next_number = $this->proposal_reference_no_exists($next_number);
+            $next_number = sprintf('%04d', $next_number);
+        } else {
+            $next_number = sprintf('%04d', config_item('proposal_start_no'));
+        }
+        if (!empty(config_item('proposal_number_format'))) {
+            $invoice_format = config_item('proposal_number_format');
+            $invoice_prefix = str_replace("[" . config_item('proposal_prefix') . "]", config_item('proposal_prefix'), $invoice_format);
+            $yyyy = str_replace("[yyyy]", date('Y'), $invoice_prefix);
+            $yy = str_replace("[yy]", date('y'), $yyyy);
+            $mm = str_replace("[mm]", date('M'), $yy);
+            $m = str_replace("[m]", date('m'), $mm);
+            $dd = str_replace("[dd]", date('d'), $m);
+            $next_number = str_replace("[number]", $next_number, $dd);
+        }
+        return $next_number;
+    }
+
+    public function proposal_reference_no_exists($next_number)
+    {
+        $next_number = sprintf('%04d', $next_number);
+
+        $records = $this->db->where('reference_no', config_item('proposal_prefix') . $next_number)->get('tbl_proposals')->num_rows();
+        if ($records > 0) {
+            return $this->proposal_reference_no_exists($next_number + 1);
+        } else {
+            return $next_number;
+        }
+    }
     public function generate_purchase_number()
     {
         $total_invoice = $this->count_rows('tbl_purchases');
@@ -669,15 +722,25 @@
 //            if ($next_number < $ref_number) {
 //                $next_number = $ref_number + 1;
 //            }
-            if ($next_number < config_item('invoice_start_no')) {
-                $next_number = config_item('invoice_start_no');
+            if ($next_number < config_item('purchase_start_no')) {
+                $next_number = config_item('purchase_start_no');
             }
             $next_number = $this->purchase_reference_no_exists($next_number);
             $next_number = sprintf('%04d', $next_number);
-            return $next_number;
         } else {
-            return sprintf('%04d', config_item('invoice_start_no'));
+            $next_number = sprintf('%04d', config_item('purchase_start_no'));
         }
+        if (!empty(config_item('purchase_number_format'))) {
+            $invoice_format = config_item('purchase_number_format');
+            $invoice_prefix = str_replace("[" . config_item('purchase_prefix') . "]", config_item('purchase_prefix'), $invoice_format);
+            $yyyy = str_replace("[yyyy]", date('Y'), $invoice_prefix);
+            $yy = str_replace("[yy]", date('y'), $yyyy);
+            $mm = str_replace("[mm]", date('M'), $yy);
+            $m = str_replace("[m]", date('m'), $mm);
+            $dd = str_replace("[dd]", date('d'), $m);
+            $next_number = str_replace("[number]", $next_number, $dd);
+        }
+        return $next_number;
     }
 
     public function purchase_reference_no_exists($next_number)
@@ -700,15 +763,25 @@
 //            if ($next_number < $ref_number) {
 //                $next_number = $ref_number + 1;
 //            }
-            if ($next_number < config_item('invoice_start_no')) {
-                $next_number = config_item('invoice_start_no');
+            if ($next_number < config_item('return_stock_start_no')) {
+                $next_number = config_item('return_stock_start_no');
             }
             $next_number = $this->return_stock_reference_no_exists($next_number);
             $next_number = sprintf('%04d', $next_number);
-            return $next_number;
         } else {
-            return sprintf('%04d', config_item('invoice_start_no'));
+            $next_number = sprintf('%04d', config_item('return_stock_start_no'));
         }
+        if (!empty(config_item('return_stock_number_format'))) {
+            $invoice_format = config_item('return_stock_number_format');
+            $invoice_prefix = str_replace("[" . config_item('return_stock_prefix') . "]", config_item('return_stock_prefix'), $invoice_format);
+            $yyyy = str_replace("[yyyy]", date('Y'), $invoice_prefix);
+            $yy = str_replace("[yy]", date('y'), $yyyy);
+            $mm = str_replace("[mm]", date('M'), $yy);
+            $m = str_replace("[m]", date('m'), $mm);
+            $dd = str_replace("[dd]", date('d'), $m);
+            $next_number = str_replace("[number]", $next_number, $dd);
+        }
+        return $next_number;
     }
 
     public function return_stock_reference_no_exists($next_number)

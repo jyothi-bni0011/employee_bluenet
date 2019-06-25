@@ -68,7 +68,7 @@ class Purchase extends Admin_Controller
                         $bg = "warning";
                     } elseif ($status == ('not_paid')) {
                         $bg = "danger";
-                    }elseif ($v_purchase->emailed == 'Yes') {
+                    } elseif ($v_purchase->emailed == 'Yes') {
                         $bg = "info";
                     } else {
                         $bg = "danger";
@@ -176,6 +176,7 @@ class Purchase extends Admin_Controller
             $index = 0;
             foreach ($items_data as $items) {
                 $items['purchase_id'] = $purchase_id;
+                unset($items['total_qty']);
                 $tax = 0;
                 if (!empty($items['taxname'])) {
                     foreach ($items['taxname'] as $tax_name) {

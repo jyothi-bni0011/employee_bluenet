@@ -22,7 +22,7 @@ $allow_customer_edit_amount = config_item('allow_customer_edit_amount');
         <input type="hidden" name="currency" value="<?= $invoice_info['currency'] ?>">
         <input type="hidden" name="item_number" value="<?= $invoice_info['item_number'] ?>">
         <?php if (!empty($allow_customer_edit_amount) && $allow_customer_edit_amount == 'No') { ?>
-            <input name="amount" value="<?= number_format($invoice_info['amount'], 2, '.', '') ?>" type="hidden">
+            <input name="amount" value="<?= number_format($invoice_info['amount'], config_item('decimal_separator'), '.', '') ?>" type="hidden">
         <?php } ?>
         <div class="form-group">
             <label class="col-lg-4 control-label"><?= lang('amount') ?> ( <?= $invoice_info['currency'] ?>) </label>

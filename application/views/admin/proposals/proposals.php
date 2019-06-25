@@ -536,7 +536,9 @@
                                                 if (!empty($proposals_info)) {
                                                     echo $proposals_info->reference_no;
                                                 } else {
-                                                    echo config_item('proposal_prefix');
+                                                    if (empty(config_item('proposal_number_format'))) {
+                                                        echo config_item('proposal_prefix');
+                                                    }
                                                     if (config_item('increment_proposal_number') == 'FALSE') {
                                                         $this->load->helper('string');
                                                         echo random_string('nozero', 6);

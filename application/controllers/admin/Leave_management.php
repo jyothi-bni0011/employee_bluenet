@@ -202,7 +202,7 @@ class Leave_Management extends Admin_Controller
                 }
                 if ($v_all_leave->leave_type == 'hours') {
                     $total_hours = ($v_all_leave->hours / $office_hours);
-                    $duration .= number_format($total_hours, 2) . ' ' . lang('days') . ' (<span class="text-danger">' . $v_all_leave->hours . '.00' . lang('hours') . '</span>)';
+                    $duration .= number_format($total_hours, 2  ) . ' ' . lang('days') . ' (<span class="text-danger">' . $v_all_leave->hours . '.00' . lang('hours') . '</span>)';
                 }
 
                 $sub_array[] = $duration;

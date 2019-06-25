@@ -7,11 +7,7 @@
     </header>
 
     <form enctype="multipart/form-data" id="update_client" data-parsley-validate="" novalidate=""
-          action="<?php echo base_url(); ?>admin/client/update_client/<?php
-          if (!empty($client_info)) {
-              echo $client_info->client_id;
-          }
-          ?>" method="post" class="form-horizontal  ">
+          action="<?php echo base_url('admin/client/update_client') ?>" method="post" class="form-horizontal  ">
         <div class="panel-body">
             <label class="control-label col-sm-3"></label
             <div class="col-sm-12">
@@ -445,14 +441,20 @@
                 response = JSON.parse(response);
                 if (response.status == 'success') {
                     if (typeof (response.id) != 'undefined') {
-                        var groups = $('select[name="client_id"]');
+                        var client_id = $('select[name="client_id"]');
+                        var paid_by = $('select[name="paid_by"]');
+                        if (client_id.length != 0) {
+                            var groups = client_id;
+                        } else if (paid_by.length != 0) {
+                            var groups = paid_by;
+                        }
                         groups.prepend('<option selected value="' + response.id + '">' + response.name + '</option>');
                         var select2Instance = groups.data('select2');
                         var resetOptions = select2Instance.options.options;
                         groups.select2('destroy').select2(resetOptions)
                     }
-                    toastr[response.status](response.message);
                 }
+                toastr[response.status](response.message);
                 $('#myModal').modal('hide');
             }).fail(function () {
                 console.log('There was a problem with AJAX')
@@ -465,7 +467,6 @@
         data.address = $('textarea[name="address"]').val();
         data.city = $('input[name="city"]').val();
         data.country = $('select[name="country"] option:selected').text();
-        console.log(data);
         $('#gmaps-search-icon').removeClass('fa-google').addClass('fa-spinner fa-spin');
         $.post('<?= base_url()?>admin/global_controller/fetch_address_info_gmaps', data).done(function (data) {
             data = JSON.parse(data);

@@ -479,7 +479,7 @@ h4 {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgba(50, 50, 50, 0.3);
+    background-color: #17759a;
 }
 
 ::-webkit-scrollbar-track {

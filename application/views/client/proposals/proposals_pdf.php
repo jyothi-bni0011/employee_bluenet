@@ -22,6 +22,13 @@
             clear: both;
         }
 
+        .h4 {
+            font-size: 18px;
+        }
+
+        .h3 {
+            font-size: 24px;
+        }
         a {
             color: #0087C3;
             text-decoration: none;
@@ -485,14 +492,23 @@ if(!file_exists($img)){
             <td colspan="1"><?= $language_info['adjustment'] ?></td>
             <td><?= display_money($proposals_info->adjustment); ?></td>
         </tr>
-    <?php endif ?>
+    <?php endif;
+    $total_proposal = $this->proposal_model->proposal_calculation('total', $proposals_info->proposals_id);
+    ?>
     <tr class="total">
         <td colspan="<?= $colspan ?>"></td>
         <td colspan="1"><?= $language_info['total'] ?></td>
-        <td><?= display_money($this->proposal_model->proposal_calculation('total', $proposals_info->proposals_id), $currency->symbol); ?></td>
+        <td><?= display_money($total_proposal, $currency->symbol); ?></td>
     </tr>
     </tfoot>
 </table>
+<?php if (config_item('amount_to_words') == 'Yes') { ?>
+    <div class="clearfix">
+        <p class="right h4"><strong class="h3"><?= lang('num_word') ?>
+                : </strong> <?= number_to_word($proposals_info->module_id, $total_proposal); ?></p>
+    </div>
+<?php } ?>
+
 <div id="thanks"><?= lang('thanks') ?>!</div>
 <div id="notices">
     <div class="notice"><?= strip_html_tags($proposals_info->notes,true) ?></div>

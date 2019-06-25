@@ -359,7 +359,7 @@ $currency = $this->purchase_model->check_by(array('code' => config_item('default
                 </div>
 
                 <?php
-
+                $purchase_due = $this->purchase_model->calculate_to('purchase_due', $purchase_info->purchase_id);
                 if ($paid_amount > 0) {
                     $total = lang('total_due');
                     if ($paid_amount > 0) {
@@ -373,10 +373,17 @@ $currency = $this->purchase_model->check_by(array('code' => config_item('default
                         </div>
                     <?php } else {
                         $text = '';
-                    } ?>
+                    }
+                    ?>
                     <div class="clearfix">
                         <p class="pull-left h3 <?= $text ?>"><?= $total ?></p>
-                        <p class="pull-right mr h3"><?= display_money($this->purchase_model->calculate_to('purchase_due', $purchase_info->purchase_id), $currency->symbol); ?></p>
+                        <p class="pull-right mr h3"><?= display_money($purchase_due, $currency->symbol); ?></p>
+                    </div>
+                <?php } ?>
+                <?php if (config_item('amount_to_words') == 'Yes') { ?>
+                    <div class="clearfix">
+                        <p class="pull-right h4"><strong class="h3"><?= lang('num_word') ?>
+                                : </strong> <?= number_to_word('', $purchase_due); ?></p>
                     </div>
                 <?php } ?>
             </div>

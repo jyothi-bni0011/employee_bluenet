@@ -71,7 +71,9 @@ if (!empty($created) || !empty($edited)){
                                             if (!empty($purchase_info)) {
                                                 echo $purchase_info->reference_no;
                                             } else {
-                                                echo config_item('purchase_prefix');
+                                                if (empty(config_item('proposal_number_format'))) {
+                                                    echo config_item('purchase_prefix');
+                                                }
                                                 if (config_item('increment_purchase_number') == 'FALSE') {
                                                     $this->load->helper('string');
                                                     echo random_string('nozero', 6);
@@ -420,7 +422,7 @@ if (!empty($created) || !empty($edited)){
                             if (!empty($purchase_info)) {
                                 echo $purchase_info->notes;
                             } else {
-                                echo $this->config->item('purchase_terms');
+                                echo $this->config->item('purchase_notes');
                             }
                             ?></textarea>
                                         </div>

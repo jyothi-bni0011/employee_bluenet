@@ -400,7 +400,7 @@ class Tasks extends Admin_Controller
     {
         $created = can_action('54', 'created');
         $edited = can_action('54', 'edited');
-        if (!empty($created) || !empty($edited)) {
+        if (!empty($created) || !empty($edited) && !empty($id)) {
             $data = $this->tasks_model->array_from_post(array(
                 'task_name',
                 'task_description',

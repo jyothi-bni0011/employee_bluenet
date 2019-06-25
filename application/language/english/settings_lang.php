@@ -708,6 +708,23 @@ $lang['update_stock'] = "Update Stock";
 $lang['pay'] = "Pay";
 $lang['return_stock_date'] = "Return stock date";
 $lang['mark_as'] = "Mark as";
+$lang['number_format'] = "Number Format";
+$lang['full'] = "Full";
+$lang['short'] = "Short";
+$lang['division_slash'] = "Division slash";
+$lang['horizontal_line'] = "Horizontal line";
+$lang['dotted'] = "Dotted";
+$lang['prefix'] = "Prefix";
+$lang['purchase_prefix'] = "Purchase Prefix";
+$lang['return_stock_prefix'] = "Return Stock Prefix";
+$lang['start_no'] = "Start no";
+$lang['purchase_notes'] = "Purchase Notes";
+$lang['activity_save_purchase_settings'] = "Activity save purchase settings";
+$lang['update_msg'] = "%s Information Successfully Update";
+$lang['item_total_qty_alert'] = "Total Item Qty Alert";
+$lang['amount_to_words'] = "Amount To Words";
+$lang['amount_to_words_lowercase'] = "Amount To Words into lowercase";
+$lang['output_total_amount'] = "Output total amount";
 
 
 

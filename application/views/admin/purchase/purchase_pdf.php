@@ -20,11 +20,17 @@
             src: url('<?= ROOTPATH ?>/assets/latha.ttf') format('truetype');
             /*src: url(http://eclecticgeek.com/dompdf/fonts/latha.ttf) format('true-type');*/
         }
-
         * {
             font-family: 'tamil-latha', sans-serif;
         }
 
+        .h4 {
+            font-size: 18px;
+        }
+
+        .h3 {
+            font-size: 24px;
+        }
         .clearfix:after {
             content: "";
             display: table;
@@ -475,6 +481,7 @@ if (!empty($supplier_info)) {
     </tr>
     <?php
     $paid_amount = $this->purchase_model->calculate_to('paid_amount', $purchase_info->purchase_id);
+    $purchase_due = $this->purchase_model->calculate_to('purchase_due', $purchase_info->purchase_id);
     if ($paid_amount > 0) {
         $total = lang('total_due');
         if ($paid_amount > 0) {
@@ -491,11 +498,17 @@ if (!empty($supplier_info)) {
         <tr class="total">
             <td colspan="<?= $colspan ?>"></td>
             <td colspan="1"><span <?= $text ?>><?= $total ?></span></td>
-            <td><?= display_money($this->purchase_model->calculate_to('invoice_due', $purchase_info->purchase_id), $currency->symbol); ?></td>
+            <td><?= display_money($purchase_due, $currency->symbol); ?></td>
         </tr>
     <?php } ?>
     </tfoot>
 </table>
+<?php if (config_item('amount_to_words') == 'Yes') { ?>
+    <div class="clearfix">
+        <p class="right h4"><strong class="h3"><?= lang('num_word') ?>
+                : </strong> <?= number_to_word('', $purchase_due); ?></p>
+    </div>
+<?php } ?>
 <div id="thanks"><?= lang('thanks') ?>!</div>
 <div id="notices">
     <div class="notice"><?= strip_tags($purchase_info->notes) ?></div>

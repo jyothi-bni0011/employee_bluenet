@@ -817,10 +817,10 @@ class Invoice extends Admin_Controller
 
             $itemsid = $this->input->post('items_id', TRUE);
             $items_data = $this->input->post('items', true);
-
             if (!empty($items_data)) {
                 $index = 0;
                 foreach ($items_data as $items) {
+                    unset($items['total_qty']);
                     $items['invoices_id'] = $invoice_id;
                     $tax = 0;
                     if (!empty($items['taxname'])) {

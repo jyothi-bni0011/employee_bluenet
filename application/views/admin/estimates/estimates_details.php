@@ -491,7 +491,12 @@ if (is_file(config_item('invoice_logo'))) {
                         ?>
                     </p>
                 </div>
-
+                <?php if (config_item('amount_to_words') == 'Yes') { ?>
+                    <div class="clearfix">
+                        <p class="pull-right h4"><strong class="h3"><?= lang('num_word') ?>
+                                : </strong> <?= number_to_word($estimates_info->client_id, $total_amount); ?></p>
+                    </div>
+                <?php } ?>
             </div>
         </div>
     </div>

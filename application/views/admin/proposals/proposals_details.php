@@ -29,13 +29,14 @@ $deleted = can_action('140', 'deleted');
 
     <div class="col-sm-8">
         <?php
-
+        $client_id = null;
         $can_edit = $this->proposal_model->can_action('tbl_proposals', 'edit', array('proposals_id' => $proposals_info->proposals_id));
         $can_delete = $this->proposal_model->can_action('tbl_proposals', 'delete', array('proposals_id' => $proposals_info->proposals_id));
         if ($proposals_info->module == 'client') {
             $client_info = $this->proposal_model->check_by(array('client_id' => $proposals_info->module_id), 'tbl_client');
             $currency = $this->proposal_model->client_currency_sambol($proposals_info->module_id);
             $client_lang = $client_info->language;
+            $client_id = $proposals_info->module_id;
         } else if ($proposals_info->module == 'leads') {
             $client_info = $this->proposal_model->check_by(array('leads_id' => $proposals_info->module_id), 'tbl_leads');
             if (!empty($client_info)) {
@@ -140,7 +141,7 @@ $deleted = can_action('140', 'deleted');
                     <?php if (!empty($can_edit) && !empty($edited)) { ?>
                         <li class="divider"></li>
                         <li>
-                            <a href="<?= base_url() ?>admin/proposals/index/edit_proposals/<?= $proposals_info->proposals_id ?>"><?= lang('edit_estimate') ?></a>
+                            <a href="<?= base_url() ?>admin/proposals/index/edit_proposals/<?= $proposals_info->proposals_id ?>"><?= lang('edit') . ' ' . lang('proposals') ?></a>
                         </li>
                     <?php } ?>
                 </ul>
@@ -460,10 +461,17 @@ if (is_file(config_item('invoice_logo'))) {
                 <div class="clearfix">
                     <p class="pull-left"><?= $language_info['total'] ?></p>
                     <p class="pull-right mr">
-                        <?= display_money($this->proposal_model->proposal_calculation('total', $proposals_info->proposals_id), $currency->symbol); ?>
+                        <?php
+                        $proposal_total = $this->proposal_model->proposal_calculation('total', $proposals_info->proposals_id);
+                        echo display_money($proposal_total, $currency->symbol); ?>
                     </p>
                 </div>
-
+                <?php if (config_item('amount_to_words') == 'Yes') { ?>
+                    <div class="clearfix">
+                        <p class="pull-right h4"><strong class="h3"><?= lang('num_word') ?>
+                                : </strong> <?= number_to_word($client_id, $proposal_total); ?></p>
+                    </div>
+                <?php } ?>
             </div>
         </div>
     </div>

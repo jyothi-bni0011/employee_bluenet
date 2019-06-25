@@ -41,7 +41,7 @@ class Ccavenue extends MY_Controller
             $data['action_url'] = $this->ccavenue_gateway->get_invoice_action_url();
             $input = $this->input->post();
             if (!empty($input)) {
-                $input['amount'] = number_format($input['amount'], 2, '.', '');
+                $input['amount'] = number_format($input['amount'], config_item('decimal_separator'), '.', '');
             }
             if ($input['currency'] != 'INR') {
                 $input['currency'] = 'INR';

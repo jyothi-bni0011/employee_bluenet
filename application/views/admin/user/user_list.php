@@ -99,18 +99,18 @@ if (!empty($created) || !empty($edited)){
                     </table>
                 </div>
                 <?php if (!empty($created) || !empty($edited)){ ?>
+                    <?php
+                    $user_id = null;
+                    if (!empty($login_info->user_id)) {
+                        $profile_info = $this->user_model->check_by(array('user_id' => $login_info->user_id), 'tbl_account_details');
+                        $user_id = $login_info->user_id;
+                    }
+                    ?>
                     <div class="tab-pane <?= $active == 2 ? 'active' : ''; ?>" id="new">
                         <form role="form" data-parsley-validate="" novalidate="" id="userform"
                               enctype="multipart/form-data"
-                              action="<?php echo base_url(); ?>admin/user/save_user" method="post"
+                              action="<?php echo base_url(); ?>admin/user/save_user/<?= $user_id ?>" method="post"
                               class="form-horizontal form-groups-bordered">
-
-                            <?php
-
-                            if (!empty($login_info->user_id)) {
-                                $profile_info = $this->user_model->check_by(array('user_id' => $login_info->user_id), 'tbl_account_details');
-                            }
-                            ?>
                             <input type="hidden" id="username_flag" value="">
                             <input type="hidden" id="user_id" name="user_id" value="<?php
                             if (!empty($login_info)) {
