@@ -50,19 +50,19 @@
                             columns: [testvar[0], testvar[1], testvar[2], testvar[3], testvar[4], testvar[5]]
                         }
                     },
-                    {
-                        extend: 'print',
-
-                        text: "<i class='fa fa-print'> </i> &nbsp;<?= lang('selected')?>",
-                        className: 'btn btn-success mr btn-xs',
-                        exportOptions: {
-                            modifier: {
-                                selected: true,
-                                columns: [testvar[0], testvar[1], testvar[2], testvar[3], testvar[4], testvar[5]]
-                            }
-                        }
-
-                    },
+//                    {
+//                        extend: 'print',
+//
+//                        text: "<i class='fa fa-print'> </i> &nbsp;<?= lang('selected')?>",
+//                        className: 'btn btn-success mr btn-xs',
+//                        exportOptions: {
+//                            modifier: {
+//                                selected: true,
+//                                columns: [testvar[0], testvar[1], testvar[2], testvar[3], testvar[4], testvar[5]]
+//                            }
+//                        }
+//
+//                    },
                     {
                         extend: 'excel',
                         text: '<i class="fa fa-file-excel-o"> </i>',
@@ -156,13 +156,13 @@
                     text: "<i class='fa fa-print'> </i>",
                     className: 'btn btn-danger btn-xs mr',
                 },
-                {
-                    extend: 'print',
-
-                    text: "<i class='fa fa-print'> </i> &nbsp;<?= lang('selected')?>",
-                    className: 'btn btn-success mr btn-xs',
-
-                },
+//                {
+//                    extend: 'print',
+//
+//                    text: "<i class='fa fa-print'> </i> &nbsp;<?= lang('selected')?>",
+//                    className: 'btn btn-success mr btn-xs',
+//
+//                },
                 {
                     extend: 'excel',
                     text: '<i class="fa fa-file-excel-o"> </i>',

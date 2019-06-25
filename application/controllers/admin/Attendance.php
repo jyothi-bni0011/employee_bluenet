@@ -323,14 +323,14 @@ class Attendance extends Admin_Controller
             // get all invoice
             $fetch_data = $this->datatables->get_all_clock_history($type);;
 
-            $data = array();
+            $data = array();$i=1;
             foreach ($fetch_data as $_key => $v_clock_history) {
-
+                
                 $action = null;
                 $sub_array = array();
                 $emp_id = null;
                 $emp_id .= '<a class="text-info" href="' . base_url() . 'admin/user/user_details/' . $v_clock_history->user_id . '">' . $v_clock_history->employment_id . '</a>';
-                $sub_array[] = $emp_id;
+                $sub_array[] = $i;$sub_array[] = $emp_id;
 
                 $name = null;
                 $name .= '<a class="text-info" href="' . base_url() . 'admin/user/user_details/' . $v_clock_history->user_id . '">' . $v_clock_history->fullname . '</a>';
@@ -370,7 +370,7 @@ class Attendance extends Admin_Controller
                 }
                 $sub_array[] = $action;
                 $data[] = $sub_array;
-
+                $i++;
             }
 
             render_table($data);

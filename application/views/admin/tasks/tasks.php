@@ -448,9 +448,9 @@ if ($tasks == 'kanban') {
                                     <thead>
                                     <tr>
                                         <?php if (!empty($created) || !empty($edited)) { ?>
-                                            <th class="col-sm-1" data-check-all>
+<!--                                            <th class="col-sm-1" data-check-all>
 
-                                            </th>
+                                            </th>-->
                                         <?php } ?>
                                         <th class="col-sm-3"><?= lang('task_name') ?></th>
                                         <th class="col-sm-1"><?= lang('due_date') ?></th>

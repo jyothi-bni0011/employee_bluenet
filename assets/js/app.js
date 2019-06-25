@@ -653,7 +653,7 @@ $(function () {
     $('.monthyear').datepicker({
         autoclose: true,
         startView: 1,
-        format: 'yyyy-mm',
+        format: 'MM - yyyy',
         minViewMode: 1,
     });
 

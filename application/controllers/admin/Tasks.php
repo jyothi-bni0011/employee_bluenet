@@ -167,7 +167,7 @@ class Tasks extends Admin_Controller
             foreach ($fetch_data as $_key => $v_task) {
                 if (!empty($v_task)) {
                     $action = null;
-                    $checkbox = null;
+//                    $checkbox = null;
                     $can_edit = $this->tasks_model->can_action('tbl_task', 'edit', array('task_id' => $v_task->task_id));
                     $can_delete = $this->tasks_model->can_action('tbl_task', 'delete', array('task_id' => $v_task->task_id));
                     if ($v_task->task_progress == 100) {
@@ -178,11 +178,11 @@ class Tasks extends Admin_Controller
                         $c_progress = 0;
                     }
                     $sub_array = array();
-                    if (!empty($created) || !empty($edited)) {
-                        $checkbox .= '<div class="is_complete checkbox c-checkbox"><label><input type="checkbox" data-id="' . $v_task->task_id . '" style="position: absolute"' . (($c_progress >= 100) ? 'checked' : null) . '><span class="fa fa-check"></span></label></div>';
-                    }
-
-                    $sub_array[] = $checkbox;
+//                    if (!empty($created) || !empty($edited)) {
+//                        $checkbox .= '<div class="is_complete checkbox c-checkbox"><label><input type="checkbox" data-id="' . $v_task->task_id . '" style="position: absolute"' . (($c_progress >= 100) ? 'checked' : null) . '><span class="fa fa-check"></span></label></div>';
+//                    }
+//
+//                    $sub_array[] = $checkbox;
                     $name = null;
                     $name .= '<a class="text-info" href="' . base_url() . 'admin/tasks/view_task_details/' . $v_task->task_id . '">' . $v_task->task_name . '</a>';
                     if (strtotime(date('Y-m-d')) > strtotime($v_task->due_date) && $c_progress < 100) {
