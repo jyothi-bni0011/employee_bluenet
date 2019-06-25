@@ -515,5 +515,141 @@ class Departments extends Admin_Controller
         $this->load->view('admin/_layout_modal', $data);
     }
 
+    public function new_designation()
+    {
+        $data['title'] = lang('new_designation');
+        $data['subview'] = $this->load->view('admin/department/new_designation', $data, FALSE);
+        $this->load->view('admin/_layout_modal', $data);
+    }
+
+    public function saved_departments($id = NULL)
+    {
+        $created = can_action('70', 'created');
+        $edited = can_action('70', 'edited');
+        if (!empty($created) || !empty($edited) && !empty($id)) {
+            $this->department_model->_table_name = "tbl_departments"; // table name
+            $this->department_model->_primary_key = "departments_id"; // $id
+
+            $where = $this->department_model->array_from_post(array('departments_id')); //input post
+
+            $data['deptname'] = $this->input->post('deptname', true);
+            // check department by department_name
+            // if not empty return this id else save
+            $check_department = $this->department_model->check_by($where, 'tbl_departments');
+            $check_input_department = $this->department_model->check_by($data, 'tbl_departments');
+            if (!empty($check_department)) {
+                $departments_id = $check_department->departments_id;
+                $actvt = $check_department->deptname;
+            } elseif (!empty($check_input_department)) {
+                $departments_id = $check_input_department->departments_id;
+                $actvt = $check_input_department->deptname;
+            } else {
+                $data['deptname'] = $this->input->post('deptname', true);
+                $actvt = $data['deptname'];
+                if (!empty($data['deptname'])) {
+                    $departments_id = $this->department_model->save($data);
+                } else {
+                    $departments_id = $this->department_model->save($data, $id);
+                }
+            }
+
+            // input data
+            $designations = $this->input->post('designations', TRUE);
+
+            // update input data designations_id
+            $designations_id = $this->input->post('designations_id', TRUE);
+
+            $this->department_model->_table_name = "tbl_designations"; // table name
+            $this->department_model->_primary_key = "designations_id"; // $id
+            $desi_data['designations'] = $designations;
+            $desi_data['departments_id'] = $departments_id;
+            if (!empty($designations_id)) {
+                $desi_id = $designations_id;
+                $this->department_model->save($desi_data, $designations_id);
+            } else {
+                $desi_id = $this->department_model->save($desi_data);
+            }
+            // delete existing userroll by login id
+            if (!empty($designations_id)) {
+                $this->department_model->_table_name = 'tbl_user_role'; //table name
+                $this->department_model->_order_by = 'designations_id';
+                $this->department_model->_primary_key = 'user_role_id';
+                $roll = $this->department_model->get_by(array('designations_id' => $designations_id), false);
+
+                foreach ($roll as $v_roll) {
+                    $this->department_model->_table_name = 'tbl_user_role'; //table name
+                    $this->department_model->delete_multiple(array('user_role_id' => $v_roll->user_role_id));
+                }
+            }
+            $menu = $this->department_model->array_from_post(array('menu'));
+            $this->department_model->_table_name = 'tbl_user_role'; // table name
+            $this->department_model->_primary_key = 'user_role_id'; // $id
+            if (!empty($menu['menu'])) {
+                $dashboard = in_array('1', $menu['menu']);
+                $calendar = in_array('2', $menu['menu']);
+            }
+            if (empty($dashboard)) {
+                $mdata['menu_id'] = 1;
+                $mdata['designations_id'] = $desi_id;
+                $this->department_model->save($mdata);
+            }
+            if (empty($calendar)) {
+                $mdata['menu_id'] = 2;
+                $mdata['designations_id'] = $desi_id;
+                $this->department_model->save($mdata);
+            }
+
+            if (!empty($menu['menu'])) {
+                foreach ($menu['menu'] as $key => $v_menu) {
+                    if ($v_menu != 'undefined') {
+                        if ($v_menu != 1 || $v_menu != 2) {
+                            $view = $this->input->post('view_' . $v_menu, true);
+                            $created = $this->input->post('created_' . $v_menu, true);
+                            $edited = $this->input->post('edited_' . $v_menu, true);
+                            $deleted = $this->input->post('deleted_' . $v_menu, true);
+                            $mdata['view'] = (!empty($view) ? $view : 0);
+                            $mdata['created'] = (!empty($created) ? $created : 0);
+                            $mdata['edited'] = (!empty($edited) ? $edited : 0);
+                            $mdata['deleted'] = (!empty($deleted) ? $deleted : 0);
+                            $mdata['menu_id'] = $v_menu;
+                            $mdata['designations_id'] = $desi_id;
+                            $this->department_model->save($mdata);
+                        }
+
+                    }
+                }
+            }
+            $activity = array(
+                'user' => $this->session->userdata('user_id'),
+                'module' => 'departments',
+                'module_field_id' => $id,
+                'activity' => ('activity_added_a_department'),
+                'value1' => $actvt
+            );
+            $this->department_model->_table_name = 'tbl_activities';
+            $this->department_model->_primary_key = 'activities_id';
+            $this->department_model->save($activity);
+
+            // messages for user
+            $type = "success";
+            $message = lang('department_added');
+            if (!empty($desi_id)) {
+                $result = array(
+                    'id' => $desi_id,
+                    'designations' => $designations,
+                    'status' => $type,
+                    'message' => $message,
+                );
+            } else {
+                $result = array(
+                    'status' => $type,
+                    'message' => $message,
+                );
+            }
+            echo json_encode($result);
+            exit();
+        }
+    }
+
 
 }

@@ -84,6 +84,15 @@
                         </a>
                     </li>
                 <?php }
+                $can_do = can_do(155);
+                if (!empty($can_do)) { ?>
+                    <li class="<?php echo ($load_setting == 'purchase') ? 'active' : ''; ?>">
+                        <a href="<?= base_url() ?>admin/settings/purchase">
+                            <i class="fa-fw icon-handbag"></i>
+                            <?php echo lang('purchase') . ' ' . lang('purchase') ?>
+                        </a>
+                    </li>
+                <?php }
                 $can_do = can_do(119);
                 if (!empty($can_do)) { ?>
                     <li class="<?php echo ($load_setting == 'tickets') ? 'active' : ''; ?>">

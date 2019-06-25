@@ -224,18 +224,35 @@
                     <div class="form-group">
 
                         <label class="col-lg-3 control-label"><?= lang('money_format') ?></label>
-                        <div class="col-lg-3">
-                            <?php $options = array(
-                                '1' => "1,234.56",
-                                '2' => "1.234,56",
-                                '3' => "1234.56",
-                                '4' => "1234,56",
-                                '5' => "1'234.56",
-                                '6' => "1 234.56",
-                                '7' => "1 234,56",
-                                '8' => "1 234'56",
-                            );
-                            echo form_dropdown('money_format', $options, config_item('money_format'), 'style="width:100%" class="form-control select_2"'); ?>
+                        <div class="col-lg-5">
+                            <div class="input-group ">
+                                <div class="col-md-8 row">
+                                    <?php
+                                    if (empty(config_item('decimal_separator'))) {
+                                        $decimal_separator = 2;
+                                    } else {
+                                        $decimal_separator = config_item('decimal_separator');
+                                    }
+                                    $decimal = sprintf('%0' . $decimal_separator . 'd', 0);
+                                    $options = array(
+                                        '1' => "1,234." . $decimal,
+                                        '2' => "1.234," . $decimal,
+                                        '3' => "1234." . $decimal,
+                                        '4' => "1234," . $decimal,
+                                        '5' => "1'234." . $decimal,
+                                        '6' => "1 234." . $decimal,
+                                        '7' => "1 234," . $decimal,
+                                        '8' => "1 234'" . $decimal,
+                                    );
+                                    echo form_dropdown('money_format', $options, config_item('money_format'), 'style="width:100%" class="form-control select_2"'); ?>
+                                </div>
+                                <div class="col-md-4 row">
+                                    <div class="input-group-addon pt0 pb0 pl-sm pr-sm ">
+                                        <input type="text" class="form-control pt0 pb0" name="decimal_separator"
+                                               value="<?= $decimal_separator ?>">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">

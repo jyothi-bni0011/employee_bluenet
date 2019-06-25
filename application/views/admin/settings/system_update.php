@@ -17,7 +17,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="purchase_key"><?= lang('buyer') ?></label>
+                        <label for="purchase_key"><?= lang('envato_username') ?></label>
                         <input required type="text"
                                placeholder="unique_coder"
                                class="form-control" name="buyer"
@@ -101,7 +101,7 @@
                 var ubtn = $(this);
                 ubtn.html('Please wait...');
                 ubtn.addClass('disabled');
-                $.post('<?= base_url()?>admin/auto_update/validate', {
+                $.post('<?= base_url()?>admin/auto_update', {
                     purchase_key: purchase_key,
                     latest_version: latest_version,
                     buyer: buyer,
@@ -109,31 +109,20 @@
                 }).done(function (res) {
                     if (res) {
                         var result = JSON.parse(res);
+                        console.log(result);
                         $('#update_messages').html('<div class="alert alert-danger mt-lg"></div>');
                         $('#update_messages .alert').append('<p>' + result.message + '</p>');
                         ubtn.removeClass('disabled');
                         ubtn.html($('.update_app_wrapper').data('original-text'));
                     } else {
-                        $.post('<?= base_url()?>admin/auto_update', {latest_version: latest_version}).done(function (res) {
-                            if (res) {
-                                $('#update_messages').append('<p>' + res + '</p>');
-                                ubtn.removeClass('disabled');
-                                ubtn.html($('.update_app_wrapper').data('original-text'));
-                            } else {
-                                $.post('<?= base_url()?>admin/auto_update/database', {auto_update: true}).done(function (res) {
-
-                                    $('#update_messages').html('<div class="alert alert-danger mt-lg"></div>');
-                                    $('#update_messages .alert').append('<p>' + res + '</p>');
-                                    ubtn.removeClass('disabled');
-                                    ubtn.html($('.update_app_wrapper').data('original-text'));
-                                    window.location.reload();
-                                }).fail(function (response) {
-                                    $('#update_messages').html('<div class="alert alert-danger mt-lg"></div>');
-                                    $('#update_messages .alert').append('<p>' + response + '</p>');
-                                    ubtn.removeClass('disabled');
-                                    ubtn.html($('.update_app_wrapper').data('original-text'));
-                                });
-                            }
+                        $.post('<?= base_url()?>admin/auto_update/database', {auto_update: true}).done(function (res) {
+                            $('#update_messages').html('<div class="alert alert-success mt-lg"></div>');
+                            $('#update_messages .alert').append('<p>' + res + '</p>');
+                            ubtn.removeClass('disabled');
+                            ubtn.html($('.update_app_wrapper').data('original-text'));
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 5000);
                         }).fail(function (response) {
                             $('#update_messages').html('<div class="alert alert-danger mt-lg"></div>');
                             $('#update_messages .alert').append('<p>' + response + '</p>');

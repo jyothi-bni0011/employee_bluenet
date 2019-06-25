@@ -29,7 +29,6 @@ class MY_Controller extends CI_Controller
         $system_lang = $this->admin_model->get_lang();
         $this->config->set_item('language', $system_lang);
         $files = $this->admin_model->all_files();
-
         if (!empty($system_lang)) {
             foreach ($files as $file => $altpath) {
                 $shortfile = str_replace("_lang.php", "", $file);

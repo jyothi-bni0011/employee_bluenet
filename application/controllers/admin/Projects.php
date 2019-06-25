@@ -837,42 +837,16 @@ class projects extends Admin_Controller
         }
     }
 
-    function save_invoice($invoice_id = null)
+    function save_invoice($project_id = null)
     {
         $created = can_action('13', 'created');
         $edited = can_action('13', 'edited');
-        if (!empty($created) || !empty($edited) && !empty($invoice_id)) {
+        if (!empty($created) || !empty($edited) && !empty($project_id)) {
             $save_as_draft = $this->input->post('save_as_draft', true);
             $update = $this->input->post('update', true);
             if (!empty($save_as_draft) || !empty($update)) {
                 $data = $this->invoice_model->array_from_post(array('reference_no', 'client_id', 'project_id', 'discount_type', 'discount_percent', 'user_id', 'adjustment', 'discount_total', 'show_quantity_as'));
-                $project_info = $this->items_model->check_by(array('project_id' => $data['project_id']), 'tbl_project');
-                if (!empty($project_info->client_id)) {
-                    $client_info = $this->items_model->check_by(array('client_id' => $project_info->client_id), 'tbl_client');
-                    if (!empty($client_info->primary_contact)) {
-                        $notifyUser = array($client_info->primary_contact);
-                    }
-                } else {
-                    $user_info = $this->items_model->check_by(array('company' => $project_info->client_id), 'tbl_account_details');
-                    if (!empty($user_info)) {
-                        $notifyUser = array($user_info->user_id);
-                    }
-                }
 
-                if (!empty($notifyUser)) {
-                    foreach ($notifyUser as $v_user) {
-                        if ($v_user != $this->session->userdata('user_id')) {
-                            add_notification(array(
-                                'to_user_id' => $v_user,
-                                'icon' => 'shopping-cart',
-                                'description' => 'not_invoice_created',
-                                'link' => 'client/invoice/manage_invoice/invoice_details/' . $invoice_id,
-                                'value' => $data['reference_no'],
-                            ));
-                        }
-                    }
-                    show_notification($notifyUser);
-                }
                 $data['allow_paypal'] = ($this->input->post('allow_paypal') == 'Yes') ? 'Yes' : 'No';
                 $data['allow_stripe'] = ($this->input->post('allow_stripe') == 'Yes') ? 'Yes' : 'No';
                 $data['allow_2checkout'] = ($this->input->post('allow_2checkout') == 'Yes') ? 'Yes' : 'No';
@@ -944,7 +918,34 @@ class projects extends Admin_Controller
                 // get all client
                 $this->items_model->_table_name = 'tbl_invoices';
                 $this->items_model->_primary_key = 'invoices_id';
-                $invoice_id = $this->items_model->save($data, $invoice_id);
+                $invoice_id = $this->items_model->save($data);
+                $project_info = $this->items_model->check_by(array('project_id' => $data['project_id']), 'tbl_project');
+                if (!empty($project_info->client_id)) {
+                    $client_info = $this->items_model->check_by(array('client_id' => $project_info->client_id), 'tbl_client');
+                    if (!empty($client_info->primary_contact)) {
+                        $notifyUser = array($client_info->primary_contact);
+                    }
+                } else {
+                    $user_info = $this->items_model->check_by(array('company' => $project_info->client_id), 'tbl_account_details');
+                    if (!empty($user_info)) {
+                        $notifyUser = array($user_info->user_id);
+                    }
+                }
+
+                if (!empty($notifyUser)) {
+                    foreach ($notifyUser as $v_user) {
+                        if ($v_user != $this->session->userdata('user_id')) {
+                            add_notification(array(
+                                'to_user_id' => $v_user,
+                                'icon' => 'shopping-cart',
+                                'description' => 'not_invoice_created',
+                                'link' => 'client/invoice/manage_invoice/invoice_details/' . $invoice_id,
+                                'value' => $data['reference_no'],
+                            ));
+                        }
+                    }
+                    show_notification($notifyUser);
+                }
                 save_custom_field(9, $invoice_id);
 
                 $recuring_frequency = $this->input->post('recuring_frequency', TRUE);

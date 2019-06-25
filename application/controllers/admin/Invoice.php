@@ -817,10 +817,10 @@ class Invoice extends Admin_Controller
 
             $itemsid = $this->input->post('items_id', TRUE);
             $items_data = $this->input->post('items', true);
-
             if (!empty($items_data)) {
                 $index = 0;
                 foreach ($items_data as $items) {
+                    unset($items['total_qty']);
                     $items['invoices_id'] = $invoice_id;
                     $tax = 0;
                     if (!empty($items['taxname'])) {
@@ -1495,7 +1495,7 @@ class Invoice extends Admin_Controller
     }
 
     public
-    function get_payemnt($invoices_id)
+    function get_payment($invoices_id)
     {
         $edited = can_action('13', 'edited');
         $can_edit = $this->invoice_model->can_action('tbl_invoices', 'edit', array('invoices_id' => $invoices_id));
@@ -1621,7 +1621,7 @@ class Invoice extends Admin_Controller
                                     'module_field_id' => $return_id,
                                     'activity' => 'activity_new_deposit',
                                     'icon' => 'fa-building-o',
-                                    'link' => 'admin/transactions/deposit',
+                                    'link' => 'admin/transactions/view_details/' . $return_id,
                                     'value1' => $account_info->account_name,
                                     'value2' => $paid_amount,
                                 );

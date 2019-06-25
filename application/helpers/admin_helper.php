@@ -1,7 +1,5 @@
 <?php
-
-define('UPDATE_URL', 'http://system-update.coderitems.com/Ultimate');
-define('LATEST_VERSION', 'http://system-update.coderitems.com/Ultimate/latest_version.php');
+define('UPDATE_URL', 'http://update.uniquecoder.com/');
 define('TEMP_FOLDER', FCPATH . 'uploads' . '/');
 
 define('MAIN_TEMP_FOLDER', FCPATH . 'temp' . '/');
@@ -469,7 +467,9 @@ function slug_it($str, $options = array())
 
 function display_money($value, $currency = false, $decimal = 2)
 {
-
+    if (!empty(config_item('decimal_separator'))) {
+        $decimal = config_item('decimal_separator');
+    }
     switch (config_item('money_format')) {
         case 1:
             $value = number_format($value, $decimal, '.', ',');
@@ -2296,4 +2296,16 @@ function send_clock_email($type)
         }
     }
     return true;
+}
+
+function number_to_word($client_id = null, $amount)
+{
+    $ci = &get_instance();
+    if (!empty($client_id)) {
+        $client_id = ['client_id' => $client_id];
+    } else {
+        $client_id = '';
+    }
+    $ci->load->library('number_to_word', $client_id, 'numberword');
+    return $ci->numberword->convert($amount);
 }

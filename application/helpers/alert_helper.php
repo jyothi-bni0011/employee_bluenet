@@ -38,7 +38,6 @@ if (!function_exists('message_box')) {
             return $retval;
         }
     }
-
 }
 
 if (!function_exists('set_message')) {

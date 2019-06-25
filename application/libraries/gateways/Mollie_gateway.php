@@ -42,7 +42,7 @@ class Mollie_gateway extends App_gateway
         $gateway->setApiKey(config_item('mollie_api_key'));
 
         $oResponse = $gateway->purchase([
-            'amount' => number_format($data['amount'], 2, '.', ''),
+            'amount' => number_format($data['amount'], config_item('decimal_separator'), '.', ''),
             'description' => 'Invoice Payment via Mollie' . $data['amount'],
             'returnUrl' => site_url('payment/mollie/verify_invoice_payment'),
             'notifyUrl' => site_url('payment/mollie/invoice_webhook'),

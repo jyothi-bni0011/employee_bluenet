@@ -3,7 +3,6 @@
 $edited = can_action('13', 'edited');
 $deleted = can_action('13', 'deleted');
 $paid_amount = $this->invoice_model->calculate_to('paid_amount', $invoice_info->invoices_id);
-
 ?>
 
 <div class="row mb">
@@ -53,8 +52,7 @@ $paid_amount = $this->invoice_model->calculate_to('paid_amount', $invoice_info->
             $client_lang = 'english';
             $currency = $this->invoice_model->check_by(array('code' => config_item('default_currency')), 'tbl_currencies');
         }
-
-        unset($this->lang->is_loaded[5]);
+        //        unset($this->lang->is_loaded[5]);
         $language_info = $this->lang->load('sales_lang', $client_lang, TRUE, FALSE, '', TRUE);
         ?>
         <?php $can_edit = $this->invoice_model->can_action('tbl_invoices', 'edit', array('invoices_id' => $invoice_info->invoices_id));
@@ -519,7 +517,8 @@ if (is_file(config_item('invoice_logo'))) {
                 </div>
 
                 <?php
-
+                $invoice_due = $this->invoice_model->calculate_to('invoice_due', $invoice_info->invoices_id);
+                
                 if ($paid_amount > 0) {
                     $total = $language_info['total_due'];
                     if ($paid_amount > 0) {
@@ -536,7 +535,13 @@ if (is_file(config_item('invoice_logo'))) {
                     } ?>
                     <div class="clearfix">
                         <p class="pull-left h3 <?= $text ?>"><?= $total ?></p>
-                        <p class="pull-right mr h3"><?= display_money($this->invoice_model->calculate_to('invoice_due', $invoice_info->invoices_id), $currency->symbol); ?></p>
+                        <p class="pull-right mr h3"><?= display_money(($invoice_due), $currency->symbol); ?></p>
+                    </div>
+                <?php } ?>
+                <?php if (config_item('amount_to_words') == 'Yes') { ?>
+                    <div class="clearfix">
+                        <p class="pull-right h4"><strong class="h3"><?= lang('num_word') ?>
+                                : </strong> <?= number_to_word($invoice_info->client_id, $invoice_due); ?></p>
                     </div>
                 <?php } ?>
             </div>

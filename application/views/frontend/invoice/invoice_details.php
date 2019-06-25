@@ -1,5 +1,7 @@
 <?= message_box('success') ?>
 <?= message_box('error') ?>
+
+
 <div class="row mb">
 
     <div class="col-sm-8">
@@ -70,7 +72,6 @@
                     <?php } ?>
                 </ul>
             </div>
-
         <?php } ?>
         <?php
         if (!empty($invoice_info->project_id)) {
@@ -102,51 +103,120 @@
 <?php
 $payment_status = $this->invoice_model->get_payment_status($invoice_info->invoices_id);
 if (strtotime($invoice_info->due_date) < strtotime(date('Y-m-d')) && $payment_status != lang('fully_paid')) {
+    $start = strtotime(date('Y-m-d'));
+    $end = strtotime($invoice_info->due_date);
+    $days_between = ceil(abs($end - $start) / 86400);
     ?>
     <div class="alert bg-danger-light hidden-print">
         <button type="button" class="close" data-dismiss="alert">×</button>
         <i class="fa fa-warning"></i>
-        <?= lang('invoice_overdue') ?>
+        <?= lang('invoice_overdue') . ' ' . lang('by') . ' ' . $days_between . ' ' . lang('days') ?>
     </div>
     <?php
+}
+
+if (is_file(config_item('invoice_logo'))) {
+    $img = base_url() . config_item('invoice_logo');
+} else {
+    $img = base_url() . 'uploads/default_logo.png';
 }
 ?>
 
 <div class="panel" id="print_invoice">
-    <div class="show_print ">
-        <div class="col-xs-12">
-            <h4 class="page-header">
-                <img class="mr" style="width: 60px;width: 60px;margin-top: -10px;"
-                     src="<?= base_url() . config_item('invoice_logo') ?>"><?= config_item('company_name') ?>
-            </h4>
-        </div><!-- /.col -->
-    </div>
-    <div class="panel-body">
+    <div class="panel-body mt-lg">
+        <div class="row">
+            <div class="col-lg-6 col-xs-6">
+                <img class="pl-lg" style="width: 233px;height: 120px;"
+                     src="<?= $img ?>">
+            </div>
+            <div class="col-lg-6 col-xs-6 ">
+                <?php
+                if (!empty($client_info)) {
+                    $client_name = $client_info->name;
+                    $address = $client_info->address;
+                    $city = $client_info->city;
+                    $zipcode = $client_info->zipcode;
+                    $country = $client_info->country;
+                    $phone = $client_info->phone;
 
-        <h3 class="mt0 mb-sm"><?= $invoice_info->reference_no ?></h3>
-        <hr class="m0">
-        <div class="row mb-lg">
-            <div class="col-lg-4 col-xs-6 br pv">
-                <div class="row">
-                    <div class="col-md-2 text-center visible-md visible-lg">
-                        <em class="fa fa-truck fa-4x text-muted"></em>
-                    </div>
-                    <div class="col-md-10">
-                        <h4 class="ml-sm"><?= (config_item('company_legal_name_' . $client_lang) ? config_item('company_legal_name_' . $client_lang) : config_item('company_legal_name')) ?></h4>
-                        <address></address><?= (config_item('company_address_' . $client_lang) ? config_item('company_address_' . $client_lang) : config_item('company_address')) ?>
-                        <br><?= (config_item('company_city_' . $client_lang) ? config_item('company_city_' . $client_lang) : config_item('company_city')) ?>
-                        , <?= config_item('company_zip_code') ?>
-                        <br><?= (config_item('company_country_' . $client_lang) ? config_item('company_country_' . $client_lang) : config_item('company_country')) ?>
-                        <br/><?= $language_info['phone'] ?> : <?= config_item('company_phone') ?>
-                    </div>
+                } else {
+                    $client_name = '-';
+                    $address = '-';
+                    $city = '-';
+                    $zipcode = '-';
+                    $country = '-';
+                    $phone = '-';
+                }
+                ?>
+                <div class="pull-right pr-lg">
+                    <h4 class="mb0"><?= lang('invoice') . ' : ' . $invoice_info->reference_no ?></h4>
+                    <?= $language_info['invoice_date'] ?>
+                    : <?= strftime(config_item('date_format'), strtotime($invoice_info->invoice_date)); ?>
+                    <br><?= $language_info['due_date'] ?>
+                    : <?= strftime(config_item('date_format'), strtotime($invoice_info->due_date)); ?>
+                    <?php if (!empty($invoice_info->user_id)) { ?>
+                        <br><?= lang('sales') . ' ' . lang('agent') ?>:<?php echo fullname($invoice_info->user_id); ?>
+                    <?php }
+                    if ($payment_status == lang('fully_paid')) {
+                        $label = "success";
+                    } elseif ($payment_status == lang('draft')) {
+                        $label = "default";
+                        $text = lang('status_as_draft');
+                    } elseif ($payment_status == lang('cancelled')) {
+                        $label = "danger";
+                    } elseif ($payment_status == lang('partially_paid')) {
+                        $label = "warning";
+                    } elseif ($invoice_info->emailed == 'Yes') {
+                        $label = "info";
+                        $payment_status = lang('sent');
+                    } else {
+                        $label = "danger";
+                    }
+                    ?>
+                    <br><?= $language_info['payment_status'] ?>: <span
+                            class="label label-<?= $label ?>"><?= $payment_status ?></span>
+                    <?php if (!empty($text)) { ?>
+                        <br><p
+                                style="padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;;background: color: #8a6d3b;background-color: #fcf8e3;border-color: #faebcc;"><?= $text ?></p>
+                    <?php } ?>
+                    <?php $show_custom_fields = custom_form_label(9, $invoice_info->invoices_id);
+
+                    if (!empty($show_custom_fields)) {
+                        foreach ($show_custom_fields as $c_label => $v_fields) {
+                            if (!empty($v_fields)) {
+                                ?>
+                                <br><?= $c_label ?>: <?= $v_fields; ?>
+                            <?php }
+                        }
+                    }
+                    ?>
                 </div>
             </div>
-            <div class="col-lg-4 col-xs-6 br pv">
-                <div class="row">
-                    <div class="col-md-2 text-center visible-md visible-lg">
-                        <em class="fa fa-plane fa-4x text-muted"></em>
-                    </div>
+
+        </div>
+
+        <div class="row mb-lg">
+            <div class="col-lg-6 col-xs-6">
+                <h5 class="p-md bg-items mr-15">
+                    <?= lang('our_info') ?>:
+                </h5>
+                <div class="pl-sm">
+                    <h4 class="mb0"><?= (config_item('company_legal_name_' . $client_lang) ? config_item('company_legal_name_' . $client_lang) : config_item('company_legal_name')) ?></h4>
+                    <?= (config_item('company_address_' . $client_lang) ? config_item('company_address_' . $client_lang) : config_item('company_address')) ?>
+                    <br><?= (config_item('company_city_' . $client_lang) ? config_item('company_city_' . $client_lang) : config_item('company_city')) ?>
+                    , <?= config_item('company_zip_code') ?>
+                    <br><?= (config_item('company_country_' . $client_lang) ? config_item('company_country_' . $client_lang) : config_item('company_country')) ?>
+                    <br/><?= $language_info['phone'] ?> : <?= config_item('company_phone') ?>
+                    <br/><?= lang('vat_number') ?> : <?= config_item('company_vat') ?>
+                </div>
+            </div>
+            <div class="col-lg-6 col-xs-6 ">
+                <h5 class="p-md bg-items ml-13">
+                    <?= lang('customer') ?>:
+                </h5>
+                <div class="pl-sm">
                     <?php
+
                     if (!empty($client_info)) {
                         $client_name = $client_info->name;
                         $address = $client_info->address;
@@ -154,6 +224,7 @@ if (strtotime($invoice_info->due_date) < strtotime(date('Y-m-d')) && $payment_st
                         $zipcode = $client_info->zipcode;
                         $country = $client_info->country;
                         $phone = $client_info->phone;
+
                     } else {
                         $client_name = '-';
                         $address = '-';
@@ -163,60 +234,22 @@ if (strtotime($invoice_info->due_date) < strtotime(date('Y-m-d')) && $payment_st
                         $phone = '-';
                     }
                     ?>
-                    <div class="col-md-10">
-                        <h4><?= $client_name ?></h4>
-                        <address></address><?= $address ?>
-                        <br> <?= $city ?>, <?= $zipcode ?>
-                        <br><?= $country ?>
-                        <br><?= $language_info['phone'] ?>: <?= $phone ?>
-                    </div>
+                    <h4 class="mb0"><?= $client_name ?></h4>
+                    <?= $address ?>
+                    <br> <?= $city ?>, <?= $zipcode ?>
+                    <br><?= $country ?>
+                    <br><?= $language_info['phone'] ?>: <?= $phone ?>
+                    <?php if (!empty($client_info->vat)) { ?>
+                        <br><?= lang('vat_number') ?>: <?= $client_info->vat ?>
+                    <?php } ?>
                 </div>
             </div>
-            <div class="clearfix hidden-md hidden-lg">
-                <hr>
-            </div>
-            <div class="col-lg-4 col-xs-12 pv">
-                <div class="clearfix">
-                    <p class="pull-left">INVOICE NO.</p>
-                    <p class="pull-right mr"><?= $invoice_info->reference_no ?></p>
-                </div>
-                <div class="clearfix">
-                    <p class="pull-left"><?= $language_info['invoice_date'] ?></p>
-                    <p class="pull-right mr"><?= display_date($invoice_info->invoice_date); ?></p>
-                </div>
-                <div class="clearfix">
-                    <p class="pull-left"><?= $language_info['due_date'] ?></p>
-                    <p class="pull-right mr"><?= display_date($invoice_info->due_date); ?></p>
-                </div>
-                <?php if (!empty($invoice_info->user_id)) { ?>
-                    <div class="clearfix">
-                        <p class="pull-left"><?= lang('sales') . ' ' . lang('agent') ?></p>
-                        <p class="pull-right mr"><?php
 
-                            $profile_info = $this->db->where('user_id', $invoice_info->user_id)->get('tbl_account_details')->row();
-                            if (!empty($profile_info)) {
-                                echo $profile_info->fullname;
-                            }
-                            ?></p>
-                    </div>
-                <?php } ?>
-                <div class="clearfix">
-                    <?php
-                    if ($payment_status == lang('fully_paid')) {
-                        $label = 'success';
-                    } else {
-                        $label = 'danger';
-                    }
-                    ?>
-                    <p class="pull-left"><?= $language_info['payment_status'] ?></p>
-                    <p class="pull-right mr"><span class="label label-<?= $label ?>"><?= $payment_status ?></span></p>
-                </div>
-            </div>
         </div>
         <div class="table-responsive table-bordered mb-lg">
 
-            <table class="table items invoice-items-preview" page-break-inside: auto;>
-                <thead style="background: #3a3f51;color: #fff;">
+            <table class="table items invoice-items-preview">
+                <thead class="bg-items">
                 <tr>
                     <th><?= $language_info['items'] ?></th>
                     <?php
@@ -276,6 +309,7 @@ if (strtotime($invoice_info->due_date) < strtotime(date('Y-m-d')) && $payment_st
                         <td colspan="8"><?= lang('nothing_to_display') ?></td>
                     </tr>
                 <?php endif ?>
+
                 </tbody>
             </table>
         </div>
@@ -348,6 +382,7 @@ if (strtotime($invoice_info->due_date) < strtotime(date('Y-m-d')) && $payment_st
 
                 <?php
                 $paid_amount = $this->invoice_model->calculate_to('paid_amount', $invoice_info->invoices_id);
+                $invoice_due = $this->invoice_model->calculate_to('invoice_due', $invoice_info->invoices_id);
                 if ($paid_amount > 0) {
                     $total = $language_info['total_due'];
                     if ($paid_amount > 0) {
@@ -364,7 +399,13 @@ if (strtotime($invoice_info->due_date) < strtotime(date('Y-m-d')) && $payment_st
                     } ?>
                     <div class="clearfix">
                         <p class="pull-left h3 <?= $text ?>"><?= $total ?></p>
-                        <p class="pull-right mr h3"><?= display_money($this->invoice_model->calculate_to('invoice_due', $invoice_info->invoices_id), $currency->symbol); ?></p>
+                        <p class="pull-right mr h3"><?= display_money($invoice_due, $currency->symbol); ?></p>
+                    </div>
+                <?php } ?>
+                <?php if (config_item('amount_to_words') == 'Yes') { ?>
+                    <div class="clearfix">
+                        <p class="pull-right h4"><strong class="h3"><?= lang('num_word') ?>
+                                : </strong> <?= number_to_word($invoice_info->client_id, $invoice_due); ?></p>
                     </div>
                 <?php } ?>
             </div>
@@ -372,6 +413,7 @@ if (strtotime($invoice_info->due_date) < strtotime(date('Y-m-d')) && $payment_st
     </div>
     <?= !empty($invoice_view) && $invoice_view > 0 ? $this->gst->summary($invoice_items) : ''; ?>
 </div>
+
 <?php if ($invoice_info->allow_braintree == 'Yes') { ?>
     <script src="https://js.braintreegateway.com/js/braintree-2.21.0.min.js"></script>
 <?php } ?>
@@ -380,7 +422,6 @@ if (strtotime($invoice_info->due_date) < strtotime(date('Y-m-d')) && $payment_st
     <!-- START STRIPE PAYMENT -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://checkout.stripe.com/checkout.js"></script>
-
     <!-- END STRIPE CHECKOUT -->
 <?php } ?>
 
@@ -393,4 +434,5 @@ if (strtotime($invoice_info->due_date) < strtotime(date('Y-m-d')) && $payment_st
         document.body.innerHTML = originalContents;
     }
 </script>
+
 

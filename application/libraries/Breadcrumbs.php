@@ -20,6 +20,18 @@ class Breadcrumbs
                 }
             }
         }
+        if (empty($breadcrumbs)) {
+            $url_1 = $CI->uri->segment(1);
+            $url_2 = $CI->uri->segment(2);
+            $url_3 = $CI->uri->segment(3);
+            if (empty($url_3)) {
+                $breadcrumbs = lang($url_2);
+            }  else if (empty($url_2)) {
+                $breadcrumbs = lang($url_1);
+            } else {
+                $breadcrumbs = lang($url_3);
+            }
+        }
         return $breadcrumbs;
     }
 

@@ -92,8 +92,17 @@ class Dashboard extends Client_Controller
 
     public function set_language($lang)
     {
-        $this->session->set_userdata('lang', $lang);
-        redirect($_SERVER["HTTP_REFERER"]);
+        $check_languages = get_row('tbl_languages', array('active' => 1, 'name' => $lang));
+        if (!empty($check_languages)) {
+            $this->session->set_userdata('lang', $lang);
+        } else {
+            set_message('error', lang('nothing_to_display'));
+        }
+        if (empty($_SERVER['HTTP_REFERER'])) {
+            redirect('client/dashboard');
+        } else {
+            redirect($_SERVER['HTTP_REFERER']);
+        }
     }
 
     public function announcements_details($id)

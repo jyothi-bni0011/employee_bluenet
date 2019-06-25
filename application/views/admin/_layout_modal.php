@@ -34,7 +34,6 @@ if (!empty($direction) && $direction == 'rtl') {
 <script type="text/javascript">
     $('#myModal').on('loaded.bs.modal', function () {
         $(function () {
-
             $('.selectpicker').selectpicker({});
             $('[data-toggle="tooltip"]').tooltip();
 

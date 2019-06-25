@@ -410,6 +410,7 @@ class Estimates extends Admin_Controller
                 $index = 0;
                 foreach ($items_data as $items) {
                     $items['estimates_id'] = $estimates_id;
+                    unset($items['total_qty']);
                     $tax = 0;
                     if (!empty($items['taxname'])) {
                         foreach ($items['taxname'] as $tax_name) {

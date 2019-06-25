@@ -200,6 +200,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="form-group">
                         <label class="col-lg-3 control-label"><?= lang('favicon') ?></label>
                         <div class="col-lg-7">
@@ -461,6 +462,17 @@
                                         <label class="switch">
                                             <input id="chk-float" type="checkbox" name="aside-float" value="aside-float"
                                                    data-toggle-state="aside-float" <?= config_item('aside-float') == 'aside-float' ? 'checked' : null ?>>
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="clearfix">
+                                    <p class="pull-left">Show Scrollbar</p>
+                                    <div class="pull-right">
+                                        <label class="switch">
+                                            <input id="chk-hover" type="checkbox" name="show-scrollbar"
+                                                   value="show-scrollbar"
+                                                   data-toggle-state="show-scrollbar" <?= config_item('show-scrollbar') == 'show-scrollbar' ? 'checked' : null ?>>
                                             <span></span>
                                         </label>
                                     </div>

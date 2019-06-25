@@ -18,7 +18,7 @@ $office_hours = config_item('office_hours');
                                                                             data-toggle="tab"><?= lang('my_leave') ?></a>
                 </li>
 
-                <?php if ($this->session->userdata('user_type') == 1) { ?>
+                <?php if (!empty(admin_head())) { ?>
                     <li class="all_leave <?= $active == 3 ? 'active' : '' ?>"><a href="#pending_approval"
                                                                                  data-toggle="tab"><?= lang('all_leave') ?></a>
                     </li>
@@ -74,7 +74,7 @@ $office_hours = config_item('office_hours');
                                             }
                                         }
                                         ?>
-                                        <?php if ($this->session->userdata('user_type') == 1) { ?>
+                                        <?php if (!empty(admin_head())) { ?>
                                             <th class="col-sm-2"><?= lang('action') ?></th>
                                         <?php } ?>
                                     </tr>

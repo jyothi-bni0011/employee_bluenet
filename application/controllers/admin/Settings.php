@@ -22,7 +22,6 @@ class Settings extends Admin_Controller
                 'height' => "400px"
             )
         );
-
         $this->language_files = $this->settings_model->all_files();
     }
 
@@ -110,7 +109,7 @@ class Settings extends Admin_Controller
     {
         $input_data = $this->settings_model->array_from_post(array('default_language', 'locale',
             'timezone', 'default_currency', 'default_account', 'date_format', 'time_format', 'project_details_view', 'task_details_view', 'allow_multiple_client_in_project',
-            'enable_languages', 'allow_client_registration', 'allow_client_project', 'allow_sub_tasks', 'only_allowed_ip_can_clock', 'currency_position', 'money_format', 'allowed_files', 'google_api_key',
+            'enable_languages', 'allow_client_registration', 'allow_client_project', 'allow_sub_tasks', 'only_allowed_ip_can_clock', 'currency_position', 'money_format', 'decimal_separator', 'allowed_files', 'google_api_key',
             'auto_close_ticket', 'attendance_report', 'tables_pagination_limit', 'max_file_size', 'recaptcha_secret_key', 'recaptcha_site_key'));
         $client_default_menu = serialize($this->settings_model->array_from_post(array('client_default_menu')));
         $default_tax = serialize($this->input->post('default_tax', true));
@@ -281,7 +280,7 @@ class Settings extends Admin_Controller
 
     public function save_theme()
     {
-        $input_data = $this->settings_model->array_from_post(array('website_name', 'logo_or_icon', 'sidebar_theme', 'aside-float', 'aside-collapsed', 'layout-h', 'layout-boxed', 'layout-fixed', 'login_position', 'RTL',
+        $input_data = $this->settings_model->array_from_post(array('website_name', 'logo_or_icon', 'sidebar_theme', 'aside-float', 'show-scrollbar', 'aside-collapsed', 'layout-h', 'layout-boxed', 'layout-fixed', 'login_position', 'RTL',
             'active_custom_color', 'navbar_logo_background', 'top_bar_background', 'top_bar_color', 'sidebar_background', 'sidebar_color', 'sidebar_active_background', 'sidebar_active_color', 'submenu_open_background',
             'active_background', 'active_color', 'body_background', 'active_pre_loader'));
 
@@ -501,7 +500,7 @@ class Settings extends Admin_Controller
 
     public function save_estimate()
     {
-        $input_data = $this->settings_model->array_from_post(array('estimate_prefix', 'estimate_start_no', 'show_estimate_tax', 'increment_estimate_number', 'estimate_terms', 'estimate_footer'));
+        $input_data = $this->settings_model->array_from_post(array('estimate_prefix', 'estimate_start_no', 'estimate_number_format', 'show_estimate_tax', 'increment_estimate_number', 'estimate_terms', 'estimate_footer'));
         foreach ($input_data as $key => $value) {
             if (strtolower($value) == 'on') {
                 $value = 'TRUE';
@@ -549,7 +548,7 @@ class Settings extends Admin_Controller
 
     public function save_proposals()
     {
-        $input_data = $this->settings_model->array_from_post(array('proposal_prefix', 'proposal_start_no', 'show_proposal_tax', 'increment_proposal_number', 'proposal_terms', 'proposal_footer'));
+        $input_data = $this->settings_model->array_from_post(array('proposal_prefix', 'proposal_start_no', 'proposal_number_format', 'show_proposal_tax', 'increment_proposal_number', 'proposal_terms', 'proposal_footer'));
         foreach ($input_data as $key => $value) {
             if (strtolower($value) == 'on') {
                 $value = 'TRUE';
@@ -598,9 +597,8 @@ class Settings extends Admin_Controller
 
     public function save_invoice()
     {
-        $input_data = $this->settings_model->array_from_post(array('invoice_prefix', 'invoices_due_after', 'invoice_start_no', 'qty_calculation_from_items', 'allow_customer_edit_amount', 'increment_invoice_number', 'show_invoice_tax', 'send_email_when_recur', 'default_terms', 'invoice_footer', 'invoice_view', 'gst_state'));
+        $input_data = $this->settings_model->array_from_post(array('invoice_prefix', 'invoices_due_after', 'invoice_start_no', 'amount_to_words', 'amount_to_words_lowercase', 'invoice_number_format', 'qty_calculation_from_items', 'item_total_qty_alert', 'allow_customer_edit_amount', 'increment_invoice_number', 'show_invoice_tax', 'send_email_when_recur', 'default_terms', 'invoice_footer', 'invoice_view', 'gst_state'));
         //image Process
-
         if (!empty($_FILES['invoice_logo']['name'])) {
             $val = $this->settings_model->uploadImage('invoice_logo');
             $val == TRUE || redirect('admin/settings/invoice');
@@ -609,6 +607,9 @@ class Settings extends Admin_Controller
 
         if (empty($input_data['qty_calculation_from_items'])) {
             $input_data['qty_calculation_from_items'] = 'No';
+        }
+        if (empty($input_data['item_total_qty_alert'])) {
+            $input_data['item_total_qty_alert'] = 'No';
         }
         if (empty($input_data['allow_customer_edit_amount'])) {
             $input_data['allow_customer_edit_amount'] = 'No';
@@ -642,6 +643,54 @@ class Settings extends Admin_Controller
         $message = lang('save_invoice_settings');
         set_message($type, $message);
         redirect('admin/settings/invoice');
+    }
+
+    public function purchase()
+    {
+        $data['page'] = lang('settings');
+        $data['load_setting'] = 'purchase';
+        $data['title'] = lang('purchase') . ' ' . lang('settings'); //Page title
+        $can_do = can_do(155);
+        if (!empty($can_do)) {
+            $data['subview'] = $this->load->view('admin/settings/settings', $data, TRUE);
+        } else {
+            $data['subview'] = $this->load->view('admin/settings/not_found', $data, TRUE);
+        }
+        $this->load->view('admin/_layout_main', $data); //page load
+    }
+
+    public function save_purchase()
+    {
+        $input_data = $this->settings_model->array_from_post(array('purchase_prefix', 'purchase_start_no', 'purchase_number_format', 'return_stock_prefix', 'return_stock_start_no', 'return_stock_number_format', 'purchase_notes'));
+        //image Process
+        foreach ($input_data as $key => $value) {
+            if (strtolower($value) == 'on') {
+                $value = 'TRUE';
+            } elseif (strtolower($value) == 'off') {
+                $value = 'FALSE';
+            }
+            $data = array('value' => $value);
+            $this->db->where('config_key', $key)->update('tbl_config', $data);
+            $exists = $this->db->where('config_key', $key)->get('tbl_config');
+            if ($exists->num_rows() == 0) {
+                $this->db->insert('tbl_config', array("config_key" => $key, "value" => $value));
+            }
+        }
+        $activity = array(
+            'user' => $this->session->userdata('user_id'),
+            'module' => 'settings',
+            'module_field_id' => $this->session->userdata('user_id'),
+            'activity' => ('activity_save_purchase_settings'),
+            'value1' => $input_data['purchase_prefix']
+        );
+        $this->settings_model->_table_name = 'tbl_activities';
+        $this->settings_model->_primary_key = 'activities_id';
+        $this->settings_model->save($activity);
+        // messages for user
+        $type = "success";
+        $message = lang('update_msg', lang('purchase') . ' ' . lang('settings'));
+        set_message($type, $message);
+        redirect('admin/settings/purchase');
     }
 
     public function templates()
@@ -792,7 +841,7 @@ class Settings extends Admin_Controller
         $data['page'] = lang('settings');
         $data['sub_active'] = lang('contract_type');
         if ($action == 'update_contract_type') {
-            if (!empty($created) || !empty($edited)) {
+            if (!empty($created) || !empty($edited) && !empty($id)) {
                 $this->settings_model->_table_name = 'tbl_contract_type';
                 $this->settings_model->_primary_key = 'contract_type_id';
 
@@ -901,7 +950,7 @@ class Settings extends Admin_Controller
         $data['page'] = lang('settings');
         $data['sub_active'] = lang('income_category');
         if ($action == 'update_income_category') {
-            if (!empty($created) || !empty($edited)) {
+            if (!empty($created) || !empty($edited) && !empty($id)) {
                 $this->settings_model->_table_name = 'tbl_income_category';
                 $this->settings_model->_primary_key = 'income_category_id';
 
@@ -1013,7 +1062,7 @@ class Settings extends Admin_Controller
         $data['page'] = lang('settings');
         $data['sub_active'] = lang('lead_status');
         if ($action == 'update_lead_status') {
-            if (!empty($created) || !empty($edited)) {
+            if (!empty($created) || !empty($edited) && !empty($id)) {
                 $this->settings_model->_table_name = 'tbl_lead_status';
                 $this->settings_model->_primary_key = 'lead_status_id';
 
@@ -1122,7 +1171,7 @@ class Settings extends Admin_Controller
         $data['page'] = lang('settings');
         $data['sub_active'] = lang('lead_source');
         if ($action == 'update_lead_source') {
-            if (!empty($created) || !empty($edited)) {
+            if (!empty($created) || !empty($edited) && !empty($id)) {
                 $this->settings_model->_table_name = 'tbl_lead_source';
                 $this->settings_model->_primary_key = 'lead_source_id';
 
@@ -1245,7 +1294,7 @@ class Settings extends Admin_Controller
     {
         $created = can_action('129', 'created');
         $edited = can_action('129', 'edited');
-        if (!empty($created) || !empty($edited)) {
+        if (!empty($created) || !empty($edited) && !empty($id)) {
             $input_data = $this->settings_model->array_from_post(array('opportunities_state', 'opportunities_state_reason'));
             $this->settings_model->_table_name = 'tbl_opportunities_state_reason';
             $this->settings_model->_primary_key = 'opportunities_state_reason_id';
@@ -1472,7 +1521,7 @@ class Settings extends Admin_Controller
         $data['page'] = lang('settings');
         $data['sub_active'] = lang('expense_category');
         if ($action == 'update_expense_category') {
-            if (!empty($created) || !empty($edited)) {
+            if (!empty($created) || !empty($edited) && !empty($id)) {
                 $this->settings_model->_table_name = 'tbl_expense_category';
                 $this->settings_model->_primary_key = 'expense_category_id';
 
@@ -1553,7 +1602,7 @@ class Settings extends Admin_Controller
         $data['page'] = lang('settings');
         $data['sub_active'] = lang('customer_group');
         if ($action == 'update_customer_group') {
-            if (!empty($created) || !empty($edited)) {
+            if (!empty($created) || !empty($edited) && !empty($id)) {
                 $this->settings_model->_table_name = 'tbl_customer_group';
                 $this->settings_model->_primary_key = 'customer_group_id';
 
@@ -2312,7 +2361,7 @@ class Settings extends Admin_Controller
     {
         $created = can_action('130', 'created');
         $edited = can_action('130', 'edited');
-        if (!empty($created) || !empty($edited)) {
+        if (!empty($created) || !empty($edited) && !empty($id)) {
             $data = $this->settings_model->array_from_post(array('form_id', 'field_label', 'field_type', 'help_text', 'required', 'show_on_table', 'show_on_details', 'visible_for_admin', 'status'));
 
             $data['default_value'] = json_encode($this->input->post('default_value', true));
@@ -2745,7 +2794,7 @@ class Settings extends Admin_Controller
         }
 
         if ($action == 'update_leave_category') {
-            if (!empty($created) || !empty($edited)) {
+            if (!empty($created) || !empty($edited) && !empty($id)) {
                 $this->settings_model->_table_name = 'tbl_leave_category';
                 $this->settings_model->_primary_key = 'leave_category_id';
                 // input data
@@ -3206,7 +3255,7 @@ class Settings extends Admin_Controller
         }
 
         if ($action == 'update_allowed_ip') {
-            if (!empty($created) || !empty($edited)) {
+            if (!empty($created) || !empty($edited) && !empty($id)) {
                 $this->settings_model->_table_name = 'tbl_allowed_ip';
                 $this->settings_model->_primary_key = 'allowed_ip_id';
                 // input data

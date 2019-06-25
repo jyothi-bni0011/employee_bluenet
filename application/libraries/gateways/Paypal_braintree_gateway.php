@@ -32,7 +32,7 @@ class Paypal_braintree_gateway extends App_gateway
     public function fetch_invoice_payment($transaction_id)
     {
         if (config_item('braintree_live_or_sandbox') == 'TRUE') {
-            $mode = 'FALSE';
+            $mode = '';
         } else {
             $mode = 'TRUE';
         }
@@ -48,7 +48,7 @@ class Paypal_braintree_gateway extends App_gateway
     public function generate_invoice_token()
     {
         if (config_item('braintree_live_or_sandbox') == 'TRUE') {
-            $mode = 'FALSE';
+            $mode = '';
         } else {
             $mode = 'TRUE';
         }
@@ -66,7 +66,7 @@ class Paypal_braintree_gateway extends App_gateway
     {
         // Process online for PayPal payment start
         if (config_item('braintree_live_or_sandbox') == 'TRUE') {
-            $mode = 'FALSE';
+            $mode = '';
         } else {
             $mode = 'TRUE';
         }
@@ -77,7 +77,7 @@ class Paypal_braintree_gateway extends App_gateway
         $gateway->setTestMode($mode);
 
         $response = $gateway->purchase([
-            'amount' => number_format($data['amount'], 2, '.', ''),
+            'amount' => number_format($data['amount'], config_item('decimal_separator'), '.', ''),
             'currency' => $data['currency'],
             'token' => $data['nonce'],
         ])->send();

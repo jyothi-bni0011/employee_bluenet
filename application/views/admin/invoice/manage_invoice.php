@@ -18,7 +18,6 @@ if (!empty($invoice_info)) {
             </div>
         </div>
     </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.js"></script>
     <?php include_once 'assets/admin-ajax.php'; ?>
     <?php include_once 'assets/js/sales.php'; ?>
@@ -711,7 +710,9 @@ if (!empty($invoice_info)) {
                                                 if (!empty($invoice_info)) {
                                                     echo $invoice_info->reference_no;
                                                 } else {
-                                                    echo config_item('invoice_prefix');
+                                                    if (empty(config_item('invoice_number_format'))) {
+                                                        echo config_item('invoice_prefix');
+                                                    }
                                                     if (config_item('increment_invoice_number') == 'FALSE') {
                                                         $this->load->helper('string');
                                                         echo random_string('nozero', 6);
@@ -800,34 +801,46 @@ if (!empty($invoice_info)) {
                                                         class="text-danger">*</span>
                                                 </label>
                                                 <div class="col-lg-7">
-                                                    <select class="form-control select_box" style="width: 100%"
-                                                            name="client_id"
-                                                            onchange="get_project_by_id(this.value)" required="">
-                                                        <option
-                                                            value=""><?= lang('select') . ' ' . lang('client') ?></option>
-                                                        <?php
-                                                        if (!empty($all_client)) {
-                                                            foreach ($all_client as $v_client) {
-                                                                if (!empty($project_info->client_id)) {
-                                                                    $client_id = $project_info->client_id;
-                                                                } elseif (!empty($invoice_info->client_id)) {
-                                                                    $client_id = $invoice_info->client_id;
-                                                                } elseif (!empty($c_id)) {
-                                                                    $client_id = $c_id;
-                                                                }
-                                                                ?>
-                                                                <option value="<?= $v_client->client_id ?>"
-                                                                    <?php
-                                                                    if (!empty($client_id)) {
-                                                                        echo $client_id == $v_client->client_id ? 'selected' : null;
+                                                    <div class="input-group">
+                                                        <select class="form-control select_box" style="width: 100%"
+                                                                name="client_id"
+                                                                onchange="get_project_by_id(this.value)" required="">
+                                                            <option
+                                                                    value=""><?= lang('select') . ' ' . lang('client') ?></option>
+                                                            <?php
+                                                            if (!empty($all_client)) {
+                                                                foreach ($all_client as $v_client) {
+                                                                    if (!empty($project_info->client_id)) {
+                                                                        $client_id = $project_info->client_id;
+                                                                    } elseif (!empty($invoice_info->client_id)) {
+                                                                        $client_id = $invoice_info->client_id;
+                                                                    } elseif (!empty($c_id)) {
+                                                                        $client_id = $c_id;
                                                                     }
                                                                     ?>
-                                                                ><?= ucfirst($v_client->name) ?></option>
-                                                                <?php
+                                                                    <option value="<?= $v_client->client_id ?>"
+                                                                        <?php
+                                                                        if (!empty($client_id)) {
+                                                                            echo $client_id == $v_client->client_id ? 'selected' : null;
+                                                                        }
+                                                                        ?>
+                                                                    ><?= ucfirst($v_client->name) ?></option>
+                                                                    <?php
+                                                                }
                                                             }
-                                                        }
-                                                        ?>
-                                                    </select>
+                                                            $acreated = can_action('4', 'created');
+                                                            ?>
+                                                        </select>
+                                                        <?php if (!empty($acreated)) { ?>
+                                                            <div class="input-group-addon"
+                                                                 title="<?= lang('new') . ' ' . lang('client') ?>"
+                                                                 data-toggle="tooltip" data-placement="top">
+                                                                <a data-toggle="modal" data-target="#myModal"
+                                                                   href="<?= base_url() ?>admin/client/new_client"><i
+                                                                            class="fa fa-plus"></i></a>
+                                                            </div>
+                                                        <?php } ?>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

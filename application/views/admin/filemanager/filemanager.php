@@ -5,7 +5,9 @@
 <link rel="stylesheet" type="text/css" media="screen"
       href="<?php echo site_url('assets/plugins/elFinder/css/elfinder.min.css'); ?>">
 <link rel="stylesheet" type="text/css" media="screen"
-      href="<?php echo site_url('assets/plugins/elFinder/themes/windows-10/css/theme.css'); ?>">
+      href="<?php echo site_url('assets/plugins/elFinder/themes/Material/css/theme.css'); ?>">
+<link rel="stylesheet" type="text/css" media="screen"
+      href="<?php echo site_url('assets/plugins/elFinder/themes/Material/css/theme-light.css'); ?>">
 
 <script src="<?php echo site_url('assets/plugins/elFinder/js/elfinder.min.js'); ?>"></script>
 <?php
@@ -25,8 +27,6 @@ $languages = $this->db->where('name', config_item('default_language'))->get('tbl
                 lang: _locale,
                 height: 700,
                 uiOptions: {
-                    // toolbar configuration
-
                     toolbar: [
                         ['back', 'forward'],
 //                     ['mkdir'],

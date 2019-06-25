@@ -243,7 +243,12 @@ class Dashboard extends Admin_Controller
 
     public function set_language($lang)
     {
-        $this->session->set_userdata('lang', $lang);
+        $check_languages = get_row('tbl_languages', array('active' => 1, 'name' => $lang));
+        if (!empty($check_languages)) {
+            $this->session->set_userdata('lang', $lang);
+        } else {
+            set_message('error', lang('nothing_to_display'));
+        }
         if (empty($_SERVER['HTTP_REFERER'])) {
             redirect('admin/dashboard');
         } else {

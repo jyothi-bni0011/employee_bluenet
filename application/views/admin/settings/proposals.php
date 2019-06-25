@@ -25,7 +25,24 @@
                                    value="<?= config_item('proposal_start_no') ?>" required>
                         </div>
                     </div>
-
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><?= lang('proposal') . ' ' . lang('number_format') ?></label>
+                        <div class="col-lg-5">
+                            <input type="text" name="proposal_number_format" class="form-control" style="width:260px"
+                                   value="<?php
+                                   if (empty(config_item('proposal_number_format'))) {
+                                       echo '[' . config_item('proposal_prefix') . ']' . '[yyyy][mm][dd][number]';
+                                   } else {
+                                       echo config_item('proposal_number_format');
+                                   } ?>">
+                            <small>ex [<?= config_item('proposal_prefix') ?>] = <?= lang('proposal_prefix') ?>,[yyyy] =
+                                'Current Year (<?= date('Y') ?>)'[yy] ='Current Year (<?= date('y') ?>)',[mm] =
+                                'Current Month(<?= date('M') ?>)',[m] =
+                                'Current Month(<?= date('m') ?>)',[dd] = 'Current Date (<?= date('d') ?>)',[number] =
+                                'Invoice Number (<?= sprintf('%04d', config_item('proposal_start_no')) ?>)'
+                            </small>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label"><?= lang('increment_proposal_number') ?></label>
                         <div class="col-lg-6">

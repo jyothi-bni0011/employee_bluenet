@@ -106,6 +106,15 @@
                                                 style="width:65%;border-bottom:1px solid #eee;float:right;foat:right;"><?= strftime(config_item('date_format'), strtotime($payments_info->payment_date)); ?></div>
                                             <div style="clear:both;"></div>
                                         </div>
+                                        <?php if (config_item('amount_to_words') == 'Yes') { ?>
+                                            <div style="width: 100%;padding: 11px 0;">
+                                                <div
+                                                        style="color:#999;width:35%;float:left;"><?= lang('num_word') ?></div>
+                                                <div
+                                                        style="width:65%;border-bottom:1px solid #eee;float:right;foat:right;"><?= number_to_word($invoice_info->client_id, $payments_info->amount); ?></div>
+                                                <div style="clear:both;"></div>
+                                            </div>
+                                        <?php } ?>
                                         <div style="width: 100%;padding: 10px 0;">
                                             <div
                                                 style="color:#999;width:35%;float:left;"><?= lang('transaction_id') ?></div>

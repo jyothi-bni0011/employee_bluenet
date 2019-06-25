@@ -94,7 +94,7 @@ class Two_checkout_gateway extends App_gateway
         $billing_data['email'] = $this->ci->input->post('email');
 
         $oResponse = $gateway->purchase([
-            'amount' => number_format($data['amount'], 2, '.', ''),
+            'amount' => number_format($data['amount'], config_item('decimal_separator'), '.', ''),
             'currency' => $data['currency'],
             'token' => $this->ci->input->post('token'),
             'transactionId' => $data['invoice_id'],

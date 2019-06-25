@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -747,11 +749,11 @@ class User extends Admin_Controller
     }
 
     /*     * * Save New User ** */
-    public function save_user()
+    public function save_user($id = null)
     {
         $created = can_action('24', 'created');
         $edited = can_action('24', 'edited');
-        if (!empty($created) || !empty($edited)) {
+        if (!empty($created) || !empty($edited) && !empty($id)) {
             $login_data = $this->user_model->array_from_post(array('username', 'email', 'role_id'));
             $admin = admin();
             if (!empty($login_data['role_id']) && $login_data['role_id'] == 1) {

@@ -107,7 +107,7 @@ $deleted = can_action('14', 'deleted');
                     <?php if ($estimates_info->status == 'expired' || $estimates_info->status == 'sent' || $estimates_info->status == 'cancelled' || $estimates_info->status == 'draft') { ?>
                         <li>
                             <a href="<?= base_url() ?>admin/estimates/change_status/pending/<?= $estimates_info->estimates_id ?>"
-                               title="<?= lang('mark_as_sent') ?>"><?= lang('mark_as_pending') ?></a>
+                               title="<?= lang('mark_as_pending') ?>"><?= lang('mark_as_pending') ?></a>
                         </li>
                     <?php } ?>
                     <?php if ($estimates_info->status == 'draft') { ?>
@@ -491,7 +491,12 @@ if (is_file(config_item('invoice_logo'))) {
                         ?>
                     </p>
                 </div>
-
+                <?php if (config_item('amount_to_words') == 'Yes') { ?>
+                    <div class="clearfix">
+                        <p class="pull-right h4"><strong class="h3"><?= lang('num_word') ?>
+                                : </strong> <?= number_to_word($estimates_info->client_id, $total_amount); ?></p>
+                    </div>
+                <?php } ?>
             </div>
         </div>
     </div>

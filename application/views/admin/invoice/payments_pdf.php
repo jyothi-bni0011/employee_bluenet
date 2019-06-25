@@ -108,6 +108,12 @@ if(!file_exists($img)){
         <td class="headcol"><?= lang('payment_date') ?></td>
         <td><?= strftime(config_item('date_format'), strtotime($payments_info->payment_date)); ?></td>
     </tr>
+    <?php if (config_item('amount_to_words') == 'Yes') { ?>
+        <tr>
+            <td class="headcol"><?= lang('num_word') ?></td>
+            <td><?= number_to_word($invoice_info->client_id, $payments_info->amount); ?></td>
+        </tr>
+    <?php } ?>
     <tr>
         <td style="" class="headcol"><?= lang('transaction_id') ?></td>
         <td><?= $payments_info->trans_id ?></td>

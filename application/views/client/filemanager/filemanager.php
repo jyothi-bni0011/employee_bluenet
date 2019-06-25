@@ -5,7 +5,9 @@
 <link rel="stylesheet" type="text/css" media="screen"
       href="<?php echo site_url('assets/plugins/elFinder/css/elfinder.min.css'); ?>">
 <link rel="stylesheet" type="text/css" media="screen"
-      href="<?php echo site_url('assets/plugins/elFinder/themes/windows-10/css/theme.css'); ?>">
+      href="<?php echo site_url('assets/plugins/elFinder/themes/Material/css/theme.css'); ?>">
+<link rel="stylesheet" type="text/css" media="screen"
+      href="<?php echo site_url('assets/plugins/elFinder/themes/Material/css/theme-light.css'); ?>">
 
 <script src="<?php echo site_url('assets/plugins/elFinder/js/elfinder.min.js'); ?>"></script>
 

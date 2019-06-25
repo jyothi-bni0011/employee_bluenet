@@ -546,27 +546,39 @@ if (!empty($created) || !empty($edited)){
                                         <label class="col-lg-3 control-label"><?= lang('select_client') ?> <span
                                                 class="text-danger">*</span></label>
                                         <div class="col-lg-8">
-                                            <select name="client_id" class="form-control select_box"
-                                                    style="width: 100%"
-                                                    required="">
-                                                <option value=""><?= lang('select_client') ?></option>
-                                                <?php
-                                                $all_client = $this->db->get('tbl_client')->result();
-                                                if (!empty($all_client)) {
-                                                    foreach ($all_client as $v_client) {
-                                                        ?>
-                                                        <option value="<?= $v_client->client_id ?>" <?php
-                                                        if (!empty($project_info) && $project_info->client_id == $v_client->client_id) {
-                                                            echo 'selected';
-                                                        } else if (!empty($client_id) && $client_id == $v_client->client_id) {
-                                                            echo 'selected';
+                                            <div class="input-group">
+                                                <select name="client_id" class="form-control select_box"
+                                                        style="width: 100%"
+                                                        required="">
+                                                    <option value=""><?= lang('select_client') ?></option>
+                                                    <?php
+                                                    $all_client = $this->db->get('tbl_client')->result();
+                                                    if (!empty($all_client)) {
+                                                        foreach ($all_client as $v_client) {
+                                                            ?>
+                                                            <option value="<?= $v_client->client_id ?>" <?php
+                                                            if (!empty($project_info) && $project_info->client_id == $v_client->client_id) {
+                                                                echo 'selected';
+                                                            } else if (!empty($client_id) && $client_id == $v_client->client_id) {
+                                                                echo 'selected';
+                                                            }
+                                                            ?>><?= $v_client->name ?></option>
+                                                            <?php
                                                         }
-                                                        ?>><?= $v_client->name ?></option>
-                                                        <?php
                                                     }
-                                                }
-                                                ?>
-                                            </select>
+                                                    $acreated = can_action('4', 'created');
+                                                    ?>
+                                                </select>
+                                                <?php if (!empty($acreated)) { ?>
+                                                    <div class="input-group-addon"
+                                                         title="<?= lang('new') . ' ' . lang('client') ?>"
+                                                         data-toggle="tooltip" data-placement="top">
+                                                        <a data-toggle="modal" data-target="#myModal"
+                                                           href="<?= base_url() ?>admin/client/new_client"><i
+                                                                    class="fa fa-plus"></i></a>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
                                         </div>
                                     </div>
                                     <script src="<?= base_url() ?>assets/js/jquery-ui.js"></script>

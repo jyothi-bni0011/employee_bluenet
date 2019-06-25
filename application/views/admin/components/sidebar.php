@@ -1,3 +1,33 @@
+<style>
+
+    .menu-border-transparent {
+        border-color: transparent !important;
+        height: 40px;
+        color: #a9a3a3;
+        background-color: rgba(255, 255, 255, .1);
+        /*width: 100%;*/
+    }
+
+    input[type="search"]::-webkit-search-cancel-button {
+        -webkit-appearance: searchfield-cancel-button;
+    }
+    .inner-addon {
+        position: relative;
+    }
+    .left-addon .fa {
+        left: 0px;
+    }
+    .inner-addon .fa {
+        position: absolute;
+        pointer-events: none;
+        padding: 13px;
+    }
+    .left-addon input {
+        padding-left: 30px;
+    }
+
+
+</style>
 <aside class="aside">
     <!-- START Sidebar (left)-->
     <?php
@@ -6,7 +36,7 @@
     $user_info = $this->db->where('user_id', $user_id)->get('tbl_users')->row();
     ?>
     <div class="aside-inner">
-        <nav data-sidebar-anyclick-close="" class="sidebar">
+        <nav data-sidebar-anyclick-close="" class="sidebar <?= config_item('show-scrollbar') ?>">
             <!-- START sidebar nav-->
             <ul class="nav">
                 <!-- START user info-->
@@ -34,6 +64,11 @@
                 </li>
             </ul>
             <!-- END user info-->
+            <div class="inner-addon left-addon" style="width: 95%">
+                <i class="fa fa-search"></i>
+                <input type="search" id="s-menu" class="form-control menu-border-transparent" placeholder="<?= lang('search_menu') ?>"/>
+            </div>
+            <br/>
 
             <?php
             echo $this->menu->dynamicMenu();
@@ -63,8 +98,8 @@
                                                 <span style="font-size: 12px;"><?= $project_info->project_name ?></span>
                                                 <div class="progress progress-xxs mb-lg ">
                                                     <div
-                                                        class="progress-bar progress-bar-<?php echo ($progress >= 100) ? 'success' : 'primary'; ?>"
-                                                        style="width: <?= $progress ?>%;">
+                                                            class="progress-bar progress-bar-<?php echo ($progress >= 100) ? 'success' : 'primary'; ?>"
+                                                            style="width: <?= $progress ?>%;">
                                                     </div>
                                                 </div>
                                             </a>
@@ -82,8 +117,8 @@
                                                 <span style="font-size: 12px;"><?= $task_info->task_name ?></span>
                                                 <div class="progress progress-xxs mb-lg ">
                                                     <div
-                                                        class="progress-bar progress-bar-<?php echo ($task_info->task_progress >= 100) ? 'success' : 'primary'; ?>"
-                                                        style="width: <?= $task_info->task_progress ?>%;">
+                                                            class="progress-bar progress-bar-<?php echo ($task_info->task_progress >= 100) ? 'success' : 'primary'; ?>"
+                                                            style="width: <?= $task_info->task_progress ?>%;">
                                                     </div>
                                                 </div>
                                             </a>
@@ -109,7 +144,7 @@
                                                 <div style="font-size: 8px;margin-top: -3px">
                                                     <?= lang('overdue') ?>
                                                     :<span
-                                                        class="<?= $text ?>"><?= strftime(config_item('date_format'), strtotime($invoice_info->due_date)) ?></span>
+                                                            class="<?= $text ?>"><?= strftime(config_item('date_format'), strtotime($invoice_info->due_date)) ?></span>
                                                 </div>
                                             </a>
                                         </li>
@@ -124,7 +159,7 @@
                                                data-placement="top" data-toggle="tooltip"
                                                href="<?= base_url() ?>admin/estimates/index/estimates_details/<?= $estimates_info->estimates_id ?>">
                                                 <span
-                                                    style="font-size: 12px;"><?= $estimates_info->reference_no ?></span>
+                                                        style="font-size: 12px;"><?= $estimates_info->reference_no ?></span>
                                                 <?php
                                                 if (strtotime($estimates_info->due_date) < strtotime(date('Y-m-d')) && $estimates_info->status == 'Pending') {
                                                     $text = 'text-danger';
@@ -134,7 +169,7 @@
                                                 <div style="font-size: 8px;margin-top: -3px">
                                                     <?= lang('expired') ?>
                                                     :<span
-                                                        class="<?= $text ?>"><?= strftime(config_item('date_format'), strtotime($estimates_info->due_date)) ?></span>
+                                                            class="<?= $text ?>"><?= strftime(config_item('date_format'), strtotime($estimates_info->due_date)) ?></span>
                                                 </div>
                                             </a>
                                         </li>
@@ -160,7 +195,7 @@
                                                 <div style="font-size: 8px;margin-top: -3px">
                                                     <?= lang('status') ?>
                                                     :<span
-                                                        class="text-<?= $s_label ?>"><?= lang($tickets_info->status) ?></span>
+                                                            class="text-<?= $s_label ?>"><?= lang($tickets_info->status) ?></span>
                                                 </div>
                                             </a>
                                         </li>
@@ -206,7 +241,7 @@
                                                 <div style="font-size: 8px;margin-top: -3px">
                                                     <?= lang('status') ?>
                                                     :<span
-                                                        class="text-<?= $b_label ?>"><?= lang("$bugs_info->bug_status") ?></span>
+                                                            class="text-<?= $b_label ?>"><?= lang("$bugs_info->bug_status") ?></span>
                                                 </div>
                                             </a>
                                         </li>

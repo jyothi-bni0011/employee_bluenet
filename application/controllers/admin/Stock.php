@@ -109,7 +109,7 @@ class Stock extends Admin_Controller
     {
         $created = can_action('76', 'created');
         $edited = can_action('76', 'edited');
-        if (!empty($created) || !empty($edited)) {
+        if (!empty($created) || !empty($edited) && !empty($id)) {
             $this->stock_model->_table_name = "tbl_stock_category"; // table name
             $this->stock_model->_primary_key = "stock_category_id"; // $id
 
@@ -302,7 +302,7 @@ class Stock extends Admin_Controller
     {
         $created = can_action('81', 'created');
         $edited = can_action('81', 'edited');
-        if (!empty($created) || !empty($edited)) {
+        if (!empty($created) || !empty($edited) && !empty($id)) {
             $this->stock_model->_table_name = "tbl_stock"; // table name
             $this->stock_model->_primary_key = "stock_id"; // $id
 
@@ -571,7 +571,7 @@ class Stock extends Admin_Controller
     {
         $created = can_action('82', 'created');
         $edited = can_action('82', 'edited');
-        if (!empty($created) || !empty($edited)) {
+        if (!empty($created) || !empty($edited) && !empty($id)) {
             // input data
             $data = $this->stock_model->array_from_post(array('stock_id', 'user_id', 'assign_inventory', 'assign_date')); //input post
             // check enough stock  by assign inventory

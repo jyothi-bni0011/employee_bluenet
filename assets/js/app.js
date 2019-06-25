@@ -1606,3 +1606,13 @@ initScrollbar = function (selector, options) {
 function goBack() {
     window.history.back();
 }
+
+$('#s-menu').keyup(function () {
+    var that = this, $allListElements = $('ul.s-menu > li');
+    var $matchingListElements = $allListElements.filter(function (i, li) {
+        var listItemText = $(li).text().toUpperCase(), searchText = that.value.toUpperCase();
+        return ~listItemText.indexOf(searchText);
+    });
+    $allListElements.hide();
+    $matchingListElements.show();
+});

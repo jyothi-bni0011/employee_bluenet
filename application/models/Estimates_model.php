@@ -90,31 +90,6 @@ class Estimates_Model extends MY_Model
         return $result;
     }
 
-    public function generate_estimate_number()
-    {
-        $query = $this->db->select_max('estimates_id')->get('tbl_estimates');
-        if ($query->num_rows() > 0) {
-            $row = $query->row();
-            $next_number = ++$row->estimates_id;
-            $next_number = $this->estimate_reference_no_exists($next_number);
-            $next_number = sprintf('%04d', $next_number);
-            return $next_number;
-        } else {
-            return sprintf('%04d', config_item('estimate_start_no'));
-        }
-    }
-
-    public function estimate_reference_no_exists($next_number)
-    {
-        $next_number = sprintf('%04d', $next_number);
-
-        $records = $this->db->where('reference_no', config_item('estimate_prefix') . $next_number)->get('tbl_estimates')->num_rows();
-        if ($records > 0) {
-            return $this->estimate_reference_no_exists($next_number + 1);
-        } else {
-            return $next_number;
-        }
-    }
 
     public function check_for_merge_invoice($client_id, $current_estimate)
     {

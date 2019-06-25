@@ -7,3 +7,6 @@
 [15-May-2019 11:57:25 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on boolean in /home/grafx10n/public_html/employee/application/helpers/admin_helper.php on line 1902
 [15-May-2019 11:58:01 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on boolean in /home/grafx10n/public_html/employee/application/helpers/admin_helper.php on line 1902
 [15-May-2019 12:06:12 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on boolean in /home/grafx10n/public_html/employee/application/helpers/admin_helper.php on line 1902
+[18-Jun-2019 10:08:48 UTC] PHP Fatal error:  session_start(): Failed to initialize storage module: user (path: ) in /home/grafx10n/public_html/employee/system/libraries/Session/Session.php on line 143
+[18-Jun-2019 10:08:50 UTC] PHP Fatal error:  session_start(): Failed to initialize storage module: user (path: ) in /home/grafx10n/public_html/employee/system/libraries/Session/Session.php on line 143
+[18-Jun-2019 10:08:52 UTC] PHP Fatal error:  session_start(): Failed to initialize storage module: user (path: ) in /home/grafx10n/public_html/employee/system/libraries/Session/Session.php on line 143

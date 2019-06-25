@@ -96,31 +96,7 @@ class Proposal_Model extends MY_Model
         return $result;
     }
 
-    public function generate_proposal_number()
-    {
-        $query = $this->db->query('SELECT reference_no, proposals_id FROM tbl_proposals WHERE proposals_id = (SELECT MAX(proposals_id) FROM tbl_proposals)');
-        if ($query->num_rows() > 0) {
-            $row = $query->row();
-            $next_number = ++$row->proposals_id;
-            $next_number = $this->proposal_reference_no_exists($next_number);
-            $next_number = sprintf('%04d', $next_number);
-            return $next_number;
-        } else {
-            return sprintf('%04d', config_item('proposal_start_no'));
-        }
-    }
 
-    public function proposal_reference_no_exists($next_number)
-    {
-        $next_number = sprintf('%04d', $next_number);
-
-        $records = $this->db->where('reference_no', config_item('proposal_prefix') . $next_number)->get('tbl_proposals')->num_rows();
-        if ($records > 0) {
-            return $this->proposal_reference_no_exists($next_number + 1);
-        } else {
-            return $next_number;
-        }
-    }
 
     public function check_for_merge_invoice($client_id, $current_proposal)
     {

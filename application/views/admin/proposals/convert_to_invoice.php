@@ -26,7 +26,9 @@
                                     class="text-danger">*</span></label>
                             <div class="col-lg-7">
                                 <input type="text" class="form-control" value="<?php
-                                echo config_item('invoice_prefix');
+                                if (empty(config_item('invoice_number_format'))) {
+                                    echo config_item('invoice_prefix');
+                                }
                                 if (config_item('increment_invoice_number') == 'FALSE') {
                                     $this->load->helper('string');
                                     echo random_string('nozero', 6);

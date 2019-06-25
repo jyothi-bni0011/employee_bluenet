@@ -17,6 +17,13 @@
             font-family: "Source Sans Pro", sans-serif;
         }
 
+        .h4 {
+            font-size: 18px;
+        }
+
+        .h3 {
+            font-size: 24px;
+        }
         .clearfix:after {
             content: "";
             display: table;
@@ -492,10 +499,19 @@ if (!file_exists($img)) {
     <tr class="total">
         <td colspan="<?= $colspan ?>"></td>
         <td colspan="1"><?= $language_info['total'] ?></td>
-        <td><?= display_money($this->estimates_model->estimate_calculation('total', $estimates_info->estimates_id), $currency->symbol); ?></td>
+        <td>
+            <?php
+            $total_amount = $this->estimates_model->estimate_calculation('total', $estimates_info->estimates_id);
+            echo display_money($total_amount, $currency->symbol); ?></td>
     </tr>
     </tfoot>
 </table>
+<?php if (config_item('amount_to_words') == 'Yes') { ?>
+    <div class="clearfix">
+        <p class="right h4"><strong class="h3"><?= lang('num_word') ?>
+                : </strong> <?= number_to_word($estimates_info->client_id, $total_amount); ?></p>
+    </div>
+<?php } ?>
 <div id="thanks"><?= lang('thanks') ?>!</div>
 <div id="notices">
     <div class="notice"><?= strip_html_tags($estimates_info->notes, true) ?></div>

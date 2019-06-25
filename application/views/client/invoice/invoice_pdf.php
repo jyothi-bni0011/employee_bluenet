@@ -16,6 +16,14 @@
             font-family: "Source Sans Pro", sans-serif;
         }
 
+        .h4 {
+            font-size: 18px;
+        }
+
+        .h3 {
+            font-size: 24px;
+        }
+
         .clearfix:after {
             content: "";
             display: table;
@@ -480,6 +488,7 @@ if ($uri == 'invoice_email') {
     </tr>
     <?php
     $paid_amount = $this->invoice_model->calculate_to('paid_amount', $invoice_info->invoices_id);
+    $invoice_due = $this->invoice_model->calculate_to('invoice_due', $invoice_info->invoices_id);
     if ($paid_amount > 0) {
         $total = $language_info['total_due'];
         if ($paid_amount > 0) {
@@ -496,11 +505,17 @@ if ($uri == 'invoice_email') {
         <tr class="total">
             <td colspan="<?= $colspan ?>"></td>
             <td colspan="1"><span <?= $text ?>><?= $total ?></span></td>
-            <td><?= display_money($this->invoice_model->calculate_to('invoice_due', $invoice_info->invoices_id), $currency->symbol); ?></td>
+            <td><?= display_money($invoice_due, $currency->symbol); ?></td>
         </tr>
     <?php } ?>
     </tfoot>
 </table>
+<?php if (config_item('amount_to_words') == 'Yes') { ?>
+    <div class="clearfix">
+        <p class="right h4"><strong class="h3"><?= lang('num_word') ?>
+                : </strong> <?= number_to_word($invoice_info->client_id, $invoice_due); ?></p>
+    </div>
+<?php } ?>
 <div id="thanks"><?= lang('thanks') ?>!</div>
 <div id="notices">
     <div class="notice"><?= strip_html_tags($invoice_info->notes,true) ?></div>
