@@ -332,18 +332,18 @@ endif;
             <li class="<?= $active == 4 ? 'active' : '' ?>"><a href="#document_details"
                                                                data-toggle="tab"><?= lang('document_details') ?></a>
             </li>
-            <li class="<?= $active == 5 ? 'active' : '' ?>"><a href="#salary_details"
+<!--            <li class="<?= $active == 5 ? 'active' : '' ?>"><a href="#salary_details"
                                                                data-toggle="tab"><?= lang('salary_details') ?></a>
-            </li>
+            </li>-->
             <li class="<?= $active == 6 ? 'active' : '' ?>"><a href="#timecard_details"
                                                                data-toggle="tab"><?= lang('timecard_details') ?></a>
             </li>
             <li class="<?= $active == 7 ? 'active' : '' ?>"><a href="#leave_details"
                                                                data-toggle="tab"><?= lang('leave_details') ?></a>
             </li>
-            <li class="<?= $active == 8 ? 'active' : '' ?>"><a href="#provident_found"
+<!--            <li class="<?= $active == 8 ? 'active' : '' ?>"><a href="#provident_found"
                                                                data-toggle="tab"><?= lang('provident_found') ?></a>
-            </li>
+            </li>-->
             <li class="<?= $active == 9 ? 'active' : '' ?>"><a href="#Overtime_details"
                                                                data-toggle="tab"><?= lang('Overtime_details') ?></a>
             </li>

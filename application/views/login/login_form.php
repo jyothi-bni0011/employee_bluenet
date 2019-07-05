@@ -32,8 +32,8 @@
     <button type="submit" class="btn btn-primary <?= $class ?> btn-flat"><?= lang('sign_in') ?> <i
             class="fa fa-arrow-right"></i></button>
     <?php if (empty($class)) { ?>
-        <button type="submit" name="mark_attendance" value="mark_attendance" class="btn btn-purple btn-flat pull-right">
-            <i class="fa fa-clock-o"></i> <?= lang('mark_attendance') ?> </button>
+<!--        <button type="submit" name="mark_attendance" value="mark_attendance" class="btn btn-purple btn-flat pull-right">
+            <i class="fa fa-clock-o"></i> <?= lang('mark_attendance') ?> </button>-->
     <?php } ?>
 </form>
 <?php if (config_item('allow_client_registration') == 'TRUE') { ?>
