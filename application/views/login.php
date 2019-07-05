@@ -296,8 +296,8 @@ $type = $this->session->userdata('c_message');
     </div>
 </div>
 
-<a class="pull-right btn btn-info btn-lg mt0 apply_jobs"
-   href="<?= base_url() ?>frontend"><?= lang('apply_jobs') ?></a>
+<!--<a class="pull-right btn btn-info btn-lg mt0 apply_jobs"
+   href="<?= base_url() ?>frontend"><?= lang('apply_jobs') ?></a>-->
 <?php
 if (!empty($login_position) && $login_position == 'left') {
     $col = 'col-lg-8 col-sm-6';

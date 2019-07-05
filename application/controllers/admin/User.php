@@ -209,7 +209,7 @@ class User extends Admin_Controller
             // get all expense list by year and month
             $data['all_overtime_info'] = $this->get_overtime_info($data['overtime_year'], $id);
             $data['profile_info'] = $this->db->where('user_id', $id)->get('tbl_account_details')->row();
-
+            
             $data['total_attendance'] = count($this->total_attendace_in_month($id));
 
             $data['total_absent'] = count($this->total_attendace_in_month($id, 'absent'));
