@@ -973,19 +973,23 @@ class Client extends Admin_Controller
         $deleted = can_action('4', 'deleted');
         $sbtn = $this->input->post('submit', true);
         if (!empty($sbtn) && !empty($yes)) {
+            
             if (!empty($deleted)) {
+                
                 // delete into user table by user id
                 $this->client_model->_table_name = 'tbl_account_details';
                 $this->client_model->_order_by = 'company';
                 $client_info = $this->client_model->get_by(array('company' => $client_id), FALSE);
                 if (!empty($client_info)) {
+//                    print_r($client_info);
                     foreach ($client_info as $v_client) {
+                        
                         $cwhere = array('user_id' => $v_client->user_id);
-                        if ($this->db->table_exists('tbl_private_chat')) {
-                            $this->client_model->_table_name = 'tbl_private_chat';
-                            $this->client_model->delete_multiple($cwhere);
-                        }
-
+//                        if ($this->db->table_exists('tbl_private_chat')) {
+//                            
+//                            $this->client_model->_table_name = 'tbl_private_chat';
+//                            $this->client_model->delete_multiple($cwhere);
+//                        }
                         $this->client_model->_table_name = 'tbl_private_chat_users';
                         $this->client_model->delete_multiple($cwhere);
 
@@ -1018,6 +1022,7 @@ class Client extends Admin_Controller
                         $this->client_model->delete_multiple(array('user_id' => $v_client->user_id));
 
                     }
+                    
                 }
 
                 // project

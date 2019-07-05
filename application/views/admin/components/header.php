@@ -14,13 +14,13 @@ $languages = $this->db->where('active', 1)->order_by('name', 'ASC')->get('tbl_la
             <?php if ($display == 'logo' || $display == 'logo_title') { ?>
                 <a href="#/" class="navbar-brand">
                     <div class="brand-logo">
-                        <img style="width: 100%;max-height: 42px;"
-                             src="<?= base_url() . config_item('company_logo') ?>" alt="App Logo"
+                        <img style="width: 100%;"
+                             src="<?= base_url() . config_item('company_logo') ?>" alt="Bluenet Logo"
                              class="img-responsive">
                     </div>
                     <div class="brand-logo-collapsed">
                         <img style="width: 100%;height: 48px;border-radius: 50px"
-                             src="<?= base_url() . config_item('company_logo') ?>" alt="App Logo"
+                             src="<?= base_url() . config_item('company_collapsed_logo') ?>" alt="Bluenet Logo"
                              class="img-responsive">
                     </div>
                 </a>

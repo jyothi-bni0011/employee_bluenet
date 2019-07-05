@@ -1210,7 +1210,7 @@ function client_id()
 function is_department_head($id = null)
 {
     $CI =& get_instance();
-    if (empty($user_id)) {
+    if (empty($id)) {
         $id = $CI->session->userdata('user_id');
     }
     $department_head_id = $CI->db->where('department_head_id', $id)->get('tbl_departments')->row();
@@ -1219,6 +1219,22 @@ function is_department_head($id = null)
     }
     return false;
 }
+function is_in_head_team($desg_id = null)
+{
+    $CI =& get_instance();
+    $head_desg_id = $CI->session->userdata('designations_id');
+    $where=['designations_id'=>$desg_id,'designations_id'=>$head_desg_id];
+    $head_department = $CI->db->where('designations_id',$head_desg_id)->get('tbl_designations')->row();
+    $staff_department = $CI->db->where('designations_id',$desg_id)->get('tbl_designations')->row();
+    if ($head_department->departments_id==$staff_department->departments_id) {
+        return true;
+    }
+    if (!empty(admin())) {
+        return true;
+    }
+    return false;
+}
+
 
 function designation($id = null)
 {

@@ -3,11 +3,9 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Leave_Management extends Admin_Controller
-{
+class Leave_Management extends Admin_Controller {
 
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->load->model('application_model');
 
@@ -23,8 +21,7 @@ class Leave_Management extends Admin_Controller
         );
     }
 
-    public function index($action = null, $id = NULL)
-    {
+    public function index($action = null, $id = NULL) {
         $data['title'] = lang('leave_management');
         $data['active'] = 1;
         $data['leave_active'] = 1;
@@ -55,27 +52,24 @@ class Leave_Management extends Admin_Controller
 
         $data['leave_report'] = leave_report();
         $data['my_leave_report'] = leave_report($this->session->userdata('user_id'));
-
+//        echo $subview;exit;
         $data['subview'] = $this->load->view('admin/leave_management/' . $subview, $data, TRUE);
         $this->load->view('admin/_layout_main', $data); //page load
     }
 
-    public function apply_leave()
-    {
+    public function apply_leave() {
         $data['title'] = lang('apply') . ' ' . lang('leave');
         $data['modal_subview'] = $this->load->view('admin/leave_management/apply_leave', $data, FALSE);
         $this->load->view('admin/_layout_modal', $data);
     }
 
-    public function leave_category()
-    {
+    public function leave_category() {
         $data['title'] = lang('new') . ' ' . lang('leave_category');
         $data['modal_subview'] = $this->load->view('admin/settings/inline_leave_category', $data, FALSE);
         $this->load->view('admin/_layout_modal', $data);
     }
 
-    public function update_leave_category()
-    {
+    public function update_leave_category() {
         $edited = can_action('122', 'edited');
         $created = can_action('122', 'created');
         if (!empty($created) || !empty($edited) && !empty($id)) {
@@ -134,17 +128,14 @@ class Leave_Management extends Admin_Controller
         }
     }
 
-    public function view_details($id)
-    {
+    public function view_details($id) {
         $data['title'] = lang('leave') . ' ' . lang('details');
         $data['application_info'] = $this->application_model->check_by(array('leave_application_id' => $id), 'tbl_leave_application');
         $data['modal_subview'] = $this->load->view('admin/leave_management/leave_details', $data, FALSE);
         $this->load->view('admin/_layout_modal', $data);
-
     }
 
-    public function all_leaveList()
-    {
+    public function all_leaveList() {
         if ($this->input->is_ajax_request()) {
             $this->load->model('datatables');
             $this->datatables->table = 'tbl_leave_application';
@@ -202,7 +193,7 @@ class Leave_Management extends Admin_Controller
                 }
                 if ($v_all_leave->leave_type == 'hours') {
                     $total_hours = ($v_all_leave->hours / $office_hours);
-                    $duration .= number_format($total_hours, 2  ) . ' ' . lang('days') . ' (<span class="text-danger">' . $v_all_leave->hours . '.00' . lang('hours') . '</span>)';
+                    $duration .= number_format($total_hours, 2) . ' ' . lang('days') . ' (<span class="text-danger">' . $v_all_leave->hours . '.00' . lang('hours') . '</span>)';
                 }
 
                 $sub_array[] = $duration;
@@ -221,14 +212,19 @@ class Leave_Management extends Admin_Controller
                         $sub_array[] = $v_fields;
                     }
                 }
+//                print_r($this->session->userdata());exit;
+//                if ($this->session->userdata('user_type') == 1) {
+//                  if (!empty(admin_head())) {
+                if (!empty(is_in_head_team($v_all_leave->designations_id))) {
 
-                if ($this->session->userdata('user_type') == 1) {
                     $action .= btn_view_modal('admin/leave_management/view_details/' . $v_all_leave->leave_application_id) . ' ';
                     if ($v_all_leave->application_status != '2') {
                         $action .= ajax_anchor(base_url("admin/leave_management/delete_application/" . $v_all_leave->leave_application_id), "<i class='btn btn-xs btn-danger fa fa-trash-o'></i>", array("class" => "", "title" => lang('delete'), "data-fade-out-on-success" => "#table_" . $_key)) . ' ';
                     }
-                    $sub_array[] = $action;
+                } else {
+                    $action .= '<p>NA</p>';
                 }
+                $sub_array[] = $action;
                 $data[] = $sub_array;
             }
 
@@ -238,8 +234,7 @@ class Leave_Management extends Admin_Controller
         }
     }
 
-    public function pending_approvalList()
-    {
+    public function pending_approvalList() {
         if ($this->input->is_ajax_request()) {
             $this->load->model('datatables');
             $this->datatables->table = 'tbl_leave_application';
@@ -334,7 +329,8 @@ class Leave_Management extends Admin_Controller
                         }
                     }
 
-                    if ($this->session->userdata('user_type') == 1) {
+//                    if ($this->session->userdata('user_type') == 1) {
+                    if (!empty(admin_head())) {
                         $action .= btn_view_modal('admin/leave_management/view_details/' . $v_all_leave->leave_application_id) . ' ';
                         if ($v_all_leave->application_status != '2') {
                             $action .= ajax_anchor(base_url("admin/leave_management/delete_application/" . $v_all_leave->leave_application_id), "<i class='btn btn-xs btn-danger fa fa-trash-o'></i>", array("class" => "", "title" => lang('delete'), "data-fade-out-on-success" => "#table_" . $_key)) . ' ';
@@ -345,15 +341,14 @@ class Leave_Management extends Admin_Controller
                     $data[] = $sub_array;
                 }
             }
-
+//            echo $this->session->userdata('user_type').'jyothi test';exit;
             render_table($data);
         } else {
             redirect('admin/dashboard');
         }
     }
 
-    public function my_leaveList()
-    {
+    public function my_leaveList() {
         if ($this->input->is_ajax_request()) {
             $this->load->model('datatables');
             $this->datatables->table = 'tbl_leave_application';
@@ -430,7 +425,8 @@ class Leave_Management extends Admin_Controller
                     }
                 }
 
-                if ($this->session->userdata('user_type') == 1) {
+//                if ($this->session->userdata('user_type') == 1) {
+                if (!empty(admin_head())) {
                     $action .= btn_view_modal('admin/leave_management/view_details/' . $v_all_leave->leave_application_id) . ' ';
                     if ($v_all_leave->application_status != '2') {
                         $action .= ajax_anchor(base_url("admin/leave_management/delete_application/" . $v_all_leave->leave_application_id), "<i class='btn btn-xs btn-danger fa fa-trash-o'></i>", array("class" => "", "title" => lang('delete'), "data-fade-out-on-success" => "#table_" . $_key)) . ' ';
@@ -446,8 +442,7 @@ class Leave_Management extends Admin_Controller
         }
     }
 
-    public function save_leave_application()
-    {
+    public function save_leave_application() {
         $this->application_model->_table_name = "tbl_leave_application"; // table name
         $this->application_model->_primary_key = "leave_application_id"; // $id
         //receive form input by post
@@ -467,7 +462,8 @@ class Leave_Management extends Admin_Controller
             }
             if ($data['leave_type'] == 'multiple_days') {
                 $start_date = $this->input->post('multiple_days_start_date', true);
-                $end_date = $this->input->post('multiple_days_end_date', true);;
+                $end_date = $this->input->post('multiple_days_end_date', true);
+                ;
                 $hours = null;
             }
             if ($data['leave_type'] == 'hours') {
@@ -605,7 +601,6 @@ class Leave_Management extends Admin_Controller
                             }
                         }
                     }
-
                 }
 
 
@@ -618,8 +613,7 @@ class Leave_Management extends Admin_Controller
         redirect('admin/leave_management');
     }
 
-    function check_available_leave($user_id, $start_date = NULL, $end_date = NULL, $leave_category_id = NULL)
-    {
+    function check_available_leave($user_id, $start_date = NULL, $end_date = NULL, $leave_category_id = NULL) {
 
         if (!empty($leave_category_id) && !empty($start_date)) {
             $total_leave = $this->application_model->check_by(array('leave_category_id' => $leave_category_id), 'tbl_leave_category');
@@ -636,8 +630,6 @@ class Leave_Management extends Admin_Controller
                         return lang('leave_date_conflict');
                     }
                 }
-
-
             }
 
             $token_leave = $this->db->where(array('user_id' => $user_id, 'leave_category_id' => $leave_category_id, 'application_status' => '2'))->get('tbl_leave_application')->result();
@@ -702,18 +694,15 @@ class Leave_Management extends Admin_Controller
         }
     }
 
-    public function change_status($status, $id)
-    {
+    public function change_status($status, $id) {
         $data['status'] = $status;
         $data['application_info'] = $this->application_model->check_by(array('leave_application_id' => $id), 'tbl_leave_application');
 
         $data['modal_subview'] = $this->load->view('admin/leave_management/_change_status', $data, FALSE);
         $this->load->view('admin/_layout_modal', $data);
-
     }
 
-    public function set_action($id)
-    {
+    public function set_action($id) {
         $data['application_status'] = $this->input->post('application_status', TRUE);
         if (!empty($data['application_status'])) {
             $cdata['application_status'] = $data['application_status'];
@@ -790,7 +779,8 @@ class Leave_Management extends Admin_Controller
         if (!empty($already_leave)) {
             foreach ($already_leave as $al_leave) {
                 $etype = "error";
-                $msg = lang('leave_date_conflict') . ' ' . $al_leave;;
+                $msg = lang('leave_date_conflict') . ' ' . $al_leave;
+                ;
                 set_message($etype, $msg);
             }
         } else {
@@ -802,8 +792,7 @@ class Leave_Management extends Admin_Controller
         redirect('admin/leave_management'); //redirect page
     }
 
-    function send_application_status_by_email($appl_info, $approve = null)
-    {
+    function send_application_status_by_email($appl_info, $approve = null) {
         $leave_email = config_item('leave_email');
         $user_info = $this->application_model->check_by(array('user_id' => $appl_info->user_id), 'tbl_users');
         if (!empty($leave_email) && $leave_email == 1) {
@@ -852,8 +841,7 @@ class Leave_Management extends Admin_Controller
         }
     }
 
-    public function download_files($id, $fileName)
-    {
+    public function download_files($id, $fileName) {
         $appl_info = $this->application_model->check_by(array('leave_application_id' => $id), 'tbl_leave_application');
 
         $this->load->helper('download');
@@ -868,8 +856,7 @@ class Leave_Management extends Admin_Controller
         }
     }
 
-    public function delete_application($id)
-    {
+    public function delete_application($id) {
         $appl_info = $this->application_model->check_by(array('leave_application_id' => $id), 'tbl_leave_application');
         $profile_info = $this->application_model->check_by(array('user_id' => $appl_info->user_id), 'tbl_account_details');
         $leave_category = $this->application_model->check_by(array('leave_category_id' => $appl_info->leave_category_id), '	tbl_leave_category');

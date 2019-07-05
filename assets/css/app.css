@@ -1293,7 +1293,8 @@ _:-ms-lang(x),
 
 .topnavbar .navbar-header .brand-logo {
     display: block;
-    padding: 10px 15px;
+    /*padding: 10px 15px;*/
+    padding: 6px 15px 10px;
 }
 
 .topnavbar .navbar-header .brand-logo-collapsed {
@@ -3172,7 +3173,7 @@ h3 > .breadcrumb.pull-right,
 }
 
 .user-block .user-block-info .user-block-name {
-    color: #7D848F;
+    color: #fff;font-size: 16px;
 }
 
 .user-block .user-block-info .user-block-role {
